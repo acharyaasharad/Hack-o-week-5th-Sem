@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieScope — Movie Ratings & Recommendation Explorer</title>
+  <meta name="description" content="A comprehensive Python, Flask, Pandas, and NumPy data science web app exploring movie trends, ratings, and content-based recommendations.">
+  
+  <!-- Fonts: Outfit (Display) & Plus Jakarta Sans (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom Styling -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dark-theme">
+  <!-- Layout Wrapper -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar" aria-label="Sidebar Navigation">
+      <div class="sidebar-header">
+        <a href="#dashboard" class="brand-link" id="brandLogo">
+          <div class="brand-icon">
+            <i data-lucide="clapperboard"></i>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">MovieScope</span>
+            <span class="brand-tagline">Data & Recommender</span>
+          </div>
+        </a>
+        <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Close Sidebar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">EXPLORE</div>
+        <ul class="nav-list">
+          <li>
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#movies" class="nav-item" data-section="movies">
+              <i data-lucide="film"></i>
+              <span>Explore Movies</span>
+            </a>
+          </li>
+          <li>
+            <a href="#recommendations" class="nav-item" data-section="recommendations">
+              <i data-lucide="sparkles"></i>
+              <span>Recommendations</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-group-label">ANALYTICS</div>
+        <ul class="nav-list">
+          <li>
+            <a href="#genres" class="nav-item" data-section="genres">
+              <i data-lucide="pie-chart"></i>
+              <span>Genre Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ratings" class="nav-item" data-section="ratings">
+              <i data-lucide="bar-chart-2"></i>
+              <span>Rating Insights</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-group-label">SYSTEM</div>
+        <ul class="nav-list">
+          <li>
+            <a href="#quality" class="nav-item" data-section="quality">
+              <i data-lucide="shield-check"></i>
+              <span>Data Quality</span>
+            </a>
+          </li>
+          <li>
+            <a href="#about" class="nav-item" data-section="about">
+              <i data-lucide="info"></i>
+              <span>About Project</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="dataset-pill" id="sidebarDatasetPill">
+          <span class="status-dot online"></span>
+          <span class="dataset-name" id="sidebarDatasetName">Sample Dataset</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Open Sidebar">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="breadcrumbs">
+            <span class="breadcrumb-item" id="breadcrumbSection">Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Global Quick Search -->
+          <div class="global-search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input 
+              type="text" 
+              id="globalSearchInput" 
+              placeholder="Search movies by title... (Press /)" 
+              aria-label="Global Movie Search"
+              autocomplete="off"
+            >
+            <kbd class="search-kbd">/</kbd>
+          </div>
+
+          <!-- Dataset Status -->
+          <div class="data-status-badge" id="topDataStatusBadge">
+            <span class="status-dot online"></span>
+            <span id="topDataStatusText">Dataset Ready</span>
+          </div>
+
+          <!-- Reload Data Button -->
+          <button class="icon-action-btn" id="refreshDataBtn" title="Refresh Data & Recalculate" aria-label="Refresh Data">
+            <i data-lucide="rotate-cw"></i>
+          </button>
+
+          <!-- Export Report Dropdown -->
+          <div class="dropdown-wrapper">
+            <button class="btn btn-secondary btn-sm" id="exportMenuBtn" aria-haspopup="true" aria-expanded="false">
+              <i data-lucide="download"></i>
+              <span>Export</span>
+            </button>
+            <div class="dropdown-menu" id="exportMenu" role="menu">
+              <a href="/api/export/movies" class="dropdown-item" download>
+                <i data-lucide="file-spreadsheet"></i> Filtered Movies (CSV)
+              </a>
+              <a href="/api/export/genres" class="dropdown-item" download>
+                <i data-lucide="file-pie-chart"></i> Genre Statistics (CSV)
+              </a>
+              <a href="/api/export/top-movies" class="dropdown-item" download>
+                <i data-lucide="award"></i> Top Rated Movies (CSV)
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/api/export/report" class="dropdown-item" download>
+                <i data-lucide="file-text"></i> Full Analytics Report (TXT)
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body Container -->
+      <main class="content-body" id="contentBody">
+        
+        <!-- SECTION 1: DASHBOARD -->
+        <section class="page-section active" id="section-dashboard">
+          
+          <!-- Hero Banner -->
+          <div class="dashboard-hero">
+            <div class="hero-content">
+              <div class="hero-chip">
+                <i data-lucide="sparkles" class="chip-icon"></i> MovieLens Exploration Engine
+              </div>
+              <h1 class="hero-title">Discover movies. Understand ratings.</h1>
+              <p class="hero-subtitle">Explore movie trends, compare genres, and find your next favorite film through data science, NumPy matrix math, and Bayesian statistics.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="heroExploreBtn">
+                  <i data-lucide="compass"></i> Explore Movies
+                </button>
+                <button class="btn btn-secondary" id="heroRecommendBtn">
+                  <i data-lucide="sparkles"></i> Find Recommendations
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6 Key Metric KPI Cards -->
+          <div class="kpi-grid" aria-label="Summary KPI Cards">
+            <div class="kpi-card">
+              <div class="kpi-icon-box blue">
+                <i data-lucide="film"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Movies</span>
+                <span class="kpi-value" id="kpiTotalMovies">—</span>
+                <span class="kpi-subtext">Catalogued in dataset</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box blue">
+                <i data-lucide="star"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Ratings</span>
+                <span class="kpi-value" id="kpiTotalRatings">—</span>
+                <span class="kpi-subtext">User review submissions</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box cyan">
+                <i data-lucide="users"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Unique Users</span>
+                <span class="kpi-value" id="kpiUniqueUsers">—</span>
+                <span class="kpi-subtext">Active rating accounts</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box amber">
+                <i data-lucide="tags"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Genres</span>
+                <span class="kpi-value" id="kpiTotalGenres">—</span>
+                <span class="kpi-subtext">Distinct classifications</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald">
+                <i data-lucide="activity"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Average Rating</span>
+                <span class="kpi-value" id="kpiOverallRating">—</span>
+                <span class="kpi-subtext">Mean score across dataset</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box rose">
+                <i data-lucide="trophy"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Highest Rated Film</span>
+                <span class="kpi-value title-value" id="kpiHighestRatedTitle">—</span>
+                <span class="kpi-subtext" id="kpiHighestRatedScore">Min 5 votes threshold</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured Top Rated & Popular Lists -->
+          <div class="dashboard-featured-grid">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="award" class="panel-icon text-amber"></i>
+                  <h3>Critically Acclaimed (Top Rated)</h3>
+                </div>
+                <span class="badge badge-subtle">Min 5 votes</span>
+              </div>
+              <div class="featured-list" id="dashboardTopRatedList">
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="flame" class="panel-icon text-rose"></i>
+                  <h3>Most Reviewed (Popular)</h3>
+                </div>
+                <span class="badge badge-subtle">By Vote Count</span>
+              </div>
+              <div class="featured-list" id="dashboardPopularList">
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- SECTION 2: MOVIE EXPLORER -->
+        <section class="page-section" id="section-movies">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Movie Explorer</h2>
+              <p class="section-desc">Search, filter, and inspect movie catalog metrics in real time.</p>
+            </div>
+            <div class="results-count-pill" id="explorerResultsCount">
+              Showing 0 movies
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-panel">
+            <div class="filter-row">
+              <!-- Search Title -->
+              <div class="filter-group search-filter">
+                <label for="filterSearch">Search Title</label>
+                <div class="input-with-icon">
+                  <i data-lucide="search"></i>
+                  <input type="text" id="filterSearch" placeholder="e.g. Inception, Godfather...">
+                </div>
+              </div>
+
+              <!-- Genre Filter -->
+              <div class="filter-group">
+                <label for="filterGenre">Genre</label>
+                <select id="filterGenre">
+                  <option value="all">All Genres</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <!-- Min Rating Filter -->
+              <div class="filter-group">
+                <label for="filterMinRating">Min Rating: <span id="minRatingLabel">0.0★</span></label>
+                <input type="range" id="filterMinRating" min="0" max="5" step="0.5" value="0">
+              </div>
+
+              <!-- Min Votes Filter -->
+              <div class="filter-group">
+                <label for="filterMinVotes">Min Reviews</label>
+                <input type="number" id="filterMinVotes" min="0" max="500" placeholder="e.g. 5">
+              </div>
+
+              <!-- Sort By -->
+              <div class="filter-group">
+                <label for="filterSort">Sort By</label>
+                <select id="filterSort">
+                  <option value="rating">Rating (Highest First)</option>
+                  <option value="popularity">Popularity (Most Reviews)</option>
+                  <option value="year">Release Year (Newest)</option>
+                  <option value="title">Title (A-Z)</option>
+                </select>
+              </div>
+
+              <!-- Reset Button -->
+              <div class="filter-group action-group">
+                <button class="btn btn-secondary" id="clearFiltersBtn" title="Reset all filters">
+                  <i data-lucide="rotate-ccw"></i> Reset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Movies Cards Grid -->
+          <div class="movies-grid" id="moviesGrid">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="pagination-bar" id="paginationBar">
+            <button class="btn btn-secondary btn-sm" id="prevPageBtn" disabled>
+              <i data-lucide="chevron-left"></i> Previous
+            </button>
+            <div class="pagination-info" id="paginationInfo">Page 1 of 1</div>
+            <button class="btn btn-secondary btn-sm" id="nextPageBtn" disabled>
+              Next <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- SECTION 3: RECOMMENDATIONS -->
+        <section class="page-section" id="section-recommendations">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Find Your Next Favorite</h2>
+              <p class="section-desc">Deterministic recommendations powered by Multi-Hot Genre Cosine Similarity & Bayesian Weighted Ratings.</p>
+            </div>
+          </div>
+
+          <div class="recommendation-controls-card">
+            <div class="rec-selector-row">
+              <div class="form-group flex-1">
+                <label for="recMovieSelect">Select Target Film</label>
+                <select id="recMovieSelect">
+                  <option value="" disabled selected>Choose a movie from catalog...</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="recLimitSelect">Results</label>
+                <select id="recLimitSelect">
+                  <option value="5" selected>Top 5 Matches</option>
+                  <option value="8">Top 8 Matches</option>
+                  <option value="12">Top 12 Matches</option>
+                </select>
+              </div>
+              <div class="form-group action-group">
+                <button class="btn btn-primary" id="generateRecsBtn">
+                  <i data-lucide="sparkles"></i> Generate Recommendations
+                </button>
+              </div>
+            </div>
+
+            <!-- Target Movie Details Callout -->
+            <div class="target-movie-preview" id="targetMoviePreview" style="display: none;">
+              <div class="preview-badge">Selected Baseline Film</div>
+              <div class="preview-content">
+                <h3 class="preview-title" id="targetTitle">—</h3>
+                <div class="preview-meta">
+                  <span id="targetGenres">—</span> • 
+                  <span class="rating-stars" id="targetRating">—</span> • 
+                  <span id="targetVotes">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations Results Container -->
+          <div class="recommendations-results" id="recommendationsResults">
+            <div class="empty-state">
+              <i data-lucide="film" class="empty-icon"></i>
+              <h4>No recommendations generated yet</h4>
+              <p>Pick a movie above and click "Generate Recommendations" to calculate similarity scores.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: GENRE ANALYTICS -->
+        <section class="page-section" id="section-genres">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Genre Analytics</h2>
+              <p class="section-desc">Distribution of films, aggregate popularity, and audience ratings across genres.</p>
+            </div>
+            <a href="/api/export/genres" class="btn btn-secondary btn-sm" download>
+              <i data-lucide="download"></i> Export Genre CSV
+            </a>
+          </div>
+
+          <!-- Genre Chart Container -->
+          <div class="analytics-chart-panel">
+            <div class="chart-header">
+              <div class="chart-title-group">
+                <i data-lucide="bar-chart-3" class="text-teal"></i>
+                <h3>Average Rating by Genre (Sorted Bar Chart)</h3>
+              </div>
+              <span class="chart-badge">Matplotlib / Seaborn Backend</span>
+            </div>
+            <div class="chart-frame">
+              <img id="genreChartImg" src="/api/charts/genres" alt="Average Rating by Genre Chart" loading="lazy">
+            </div>
+            <p class="chart-caption">Note: Multi-genre movies (e.g. Action|Comedy) contribute to each respective genre tally.</p>
+          </div>
+
+          <!-- Genre Data Table -->
+          <div class="table-card">
+            <div class="table-header">
+              <h3>Genre Breakdown Data Table</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="genreTable">
+                <thead>
+                  <tr>
+                    <th>Genre</th>
+                    <th>Movie Count</th>
+                    <th>Average Rating</th>
+                    <th>Total Reviews</th>
+                  </tr>
+                </thead>
+                <tbody id="genreTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: RATING INSIGHTS -->
+        <section class="page-section" id="section-ratings">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Rating Insights & Statistical Visualizations</h2>
+              <p class="section-desc">Statistical distributions, correlation matrices, and release year trends calculated from real data.</p>
+            </div>
+          </div>
+
+          <!-- Charts 2-Column Grid -->
+          <div class="charts-grid">
+            
+            <!-- Chart 1: Ratings Distribution -->
+            <div class="analytics-chart-panel">
+              <div class="chart-header">
+                <div class="chart-title-group">
+                  <i data-lucide="histogram" class="text-blue"></i>
+                  <h3>User Rating Distribution</h3>
+                </div>
+                <span class="chart-badge">Histogram + KDE</span>
+              </div>
+              <div class="chart-frame">
+                <img id="ratingDistChartImg" src="/api/charts/ratings" alt="Rating Distribution Histogram" loading="lazy">
+              </div>
+              <p class="chart-caption">Displays frequency of individual user ratings from 0.5 to 5.0 stars with kernel density estimation.</p>
+            </div>
+
+            <!-- Chart 2: Popularity vs Rating -->
+            <div class="analytics-chart-panel">
+              <div class="chart-header">
+                <div class="chart-title-group">
+                  <i data-lucide="scatter-chart" class="text-cyan"></i>
+                  <h3>Ratings vs Popularity</h3>
+                </div>
+                <span class="chart-badge">Scatter + Trendline</span>
+              </div>
+              <div class="chart-frame">
+                <img id="popularityChartImg" src="/api/charts/popularity" alt="Ratings vs Popularity Scatter Plot" loading="lazy">
+              </div>
+              <p class="chart-caption">Evaluates whether heavily reviewed movies receive systematically higher or lower ratings.</p>
+            </div>
+
+            <!-- Chart 3: Correlation Heatmap -->
+            <div class="analytics-chart-panel">
+              <div class="chart-header">
+                <div class="chart-title-group">
+                  <i data-lucide="grid" class="text-emerald"></i>
+                  <h3>Numerical Correlation Heatmap</h3>
+                </div>
+                <span class="chart-badge">Seaborn Heatmap</span>
+              </div>
+              <div class="chart-frame">
+                <img id="heatmapChartImg" src="/api/charts/heatmap" alt="Correlation Heatmap" loading="lazy">
+              </div>
+              <p class="chart-caption">Pairwise Pearson correlation between Average Rating, Rating Count, Rating Variance, and Release Year.</p>
+            </div>
+
+            <!-- Chart 4: Decade Trends -->
+            <div class="analytics-chart-panel">
+              <div class="chart-header">
+                <div class="chart-title-group">
+                  <i data-lucide="trending-up" class="text-blue"></i>
+                  <h3>Decade Release Trends</h3>
+                </div>
+                <span class="chart-badge">Dual-Axis Trend</span>
+              </div>
+              <div class="chart-frame">
+                <img id="trendsChartImg" src="/api/charts/trends" alt="Decade Trends Line Chart" loading="lazy">
+              </div>
+              <p class="chart-caption">Tracks changes in film ratings and output volume across release decades.</p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 6: DATA QUALITY -->
+        <section class="page-section" id="section-quality">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Data Quality & Pipeline Integrity</h2>
+              <p class="section-desc">Audit report of data cleaning rules, deduplication, and pipeline validations applied by DataManager.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="resetSampleDataBtn">
+              <i data-lucide="refresh-cw"></i> Reset to Sample Data
+            </button>
+          </div>
+
+          <div class="quality-grid">
+            <div class="quality-card">
+              <div class="quality-label">Active Source</div>
+              <div class="quality-value" id="qSource">—</div>
+              <div class="quality-subtext">Currently loaded dataset</div>
+            </div>
+            <div class="quality-card">
+              <div class="quality-label">Movies Retained</div>
+              <div class="quality-value" id="qMoviesRetained">—</div>
+              <div class="quality-subtext" id="qMoviesDups">0 duplicates removed</div>
+            </div>
+            <div class="quality-card">
+              <div class="quality-label">Ratings Retained</div>
+              <div class="quality-value" id="qRatingsRetained">—</div>
+              <div class="quality-subtext" id="qRatingsDups">0 duplicates removed</div>
+            </div>
+            <div class="quality-card">
+              <div class="quality-label">Invalid Ratings Handled</div>
+              <div class="quality-value" id="qRatingsInvalid">0</div>
+              <div class="quality-subtext">Filtered out of bounds [0.5, 5.0]</div>
+            </div>
+          </div>
+
+          <!-- Cleaning Operations Applied Log -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="check-circle-2" class="text-emerald"></i>
+                <h3>Cleaning Rules Executed</h3>
+              </div>
+            </div>
+            <ul class="quality-log-list" id="qualityLogList">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <!-- Dataset Upload Section -->
+          <div class="panel-card mt-4">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="upload-cloud" class="text-cyan"></i>
+                <h3>Upload Custom MovieLens Dataset</h3>
+              </div>
+              <span class="badge badge-subtle">CSV Files Only</span>
+            </div>
+            <form id="uploadDatasetForm" class="upload-form">
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label for="uploadMoviesFile">movies.csv (Required: movieId, title, genres)</label>
+                  <input type="file" id="uploadMoviesFile" accept=".csv" required>
+                </div>
+                <div class="form-field">
+                  <label for="uploadRatingsFile">ratings.csv (Required: userId, movieId, rating)</label>
+                  <input type="file" id="uploadRatingsFile" accept=".csv" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="uploadSubmitBtn">
+                <i data-lucide="upload"></i> Validate & Load Custom Dataset
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- SECTION 7: ABOUT PROJECT -->
+        <section class="page-section" id="section-about">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">About MovieScope</h2>
+              <p class="section-desc">Academic & portfolio data science project showcasing full-stack Python analytics.</p>
+            </div>
+          </div>
+
+          <div class="about-card">
+            <h3>Technical Architecture & Implemented Principles</h3>
+            <p>MovieScope is a production-style, standalone data science and recommendation engine built to demonstrate core Python, NumPy, Pandas, and Flask capabilities:</p>
+            
+            <div class="tech-stack-grid">
+              <div class="tech-box">
+                <h4><i data-lucide="code" class="text-blue"></i> Python 3 & OOP</h4>
+                <p>Modular service architecture split into <code>DataManager</code>, <code>AnalyticsEngine</code>, and <code>MovieRecommender</code> with strict separation of concerns.</p>
+              </div>
+              <div class="tech-box">
+                <h4><i data-lucide="database" class="text-blue"></i> Pandas Wrangling</h4>
+                <p>Group-by aggregation, multi-genre exploding, outer and left merges, missing-value imputation, and deduplication.</p>
+              </div>
+              <div class="tech-box">
+                <h4><i data-lucide="cpu" class="text-cyan"></i> NumPy Vectorization</h4>
+                <p>Multi-hot matrix representations, vectorized cosine similarity calculations, and Bayesian weighted rating ranking without slow loops.</p>
+              </div>
+              <div class="tech-box">
+                <h4><i data-lucide="image" class="text-emerald"></i> Matplotlib & Seaborn</h4>
+                <p>Server-side analytical figure rendering with non-interactive <code>Agg</code> backend, thread safety, and direct image streaming.</p>
+              </div>
+            </div>
+
+            <h4 class="mt-4">Recommendation Algorithm Methodology</h4>
+            <div class="formula-box">
+              <code>Weighted Rating (WR) = (v / (v + m)) × R + (m / (v + m)) × C</code>
+              <p class="formula-note">Where <strong>v</strong> is movie rating count, <strong>m</strong> is minimum rating threshold (5), <strong>R</strong> is movie average rating, and <strong>C</strong> is dataset mean rating.</p>
+              <code>Combined Score = 0.65 × Cosine Similarity + 0.35 × Normalized Weighted Rating</code>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Movie Details Modal -->
+  <div class="modal-backdrop" id="movieDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalMovieTitle" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="modalMovieTitle">Movie Details</h2>
+          <div class="modal-meta" id="modalMovieMeta">—</div>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Movie Details">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-stats-row">
+          <div class="modal-stat">
+            <span class="stat-label">Average Score</span>
+            <span class="stat-val rating-highlight" id="modalAvgRating">0.0★</span>
+          </div>
+          <div class="modal-stat">
+            <span class="stat-label">Total Reviews</span>
+            <span class="stat-val" id="modalReviewCount">0</span>
+          </div>
+          <div class="modal-stat">
+            <span class="stat-label">Release Year</span>
+            <span class="stat-val" id="modalReleaseYear">—</span>
+          </div>
+        </div>
+
+        <div class="modal-chart-section">
+          <h4>Rating Frequency Breakdown</h4>
+          <div class="rating-dist-bars" id="modalRatingBars">
+            <!-- Dynamically populated bars -->
+          </div>
+        </div>
+
+        <div class="modal-actions-row">
+          <button class="btn btn-primary btn-sm" id="modalFindSimilarBtn">
+            <i data-lucide="sparkles"></i> Find Similar Movies
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-popup" id="toastPopup" role="status" aria-live="polite">
+    <div class="toast-icon-wrap" id="toastIconWrap">
+      <i data-lucide="check" id="toastIcon"></i>
+    </div>
+    <span class="toast-text" id="toastText">Action completed successfully</span>
+  </div>
+
+  <!-- Client Script -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

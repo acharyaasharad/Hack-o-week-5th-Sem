@@ -1,0 +1,141 @@
+player_id,player_name,club,league,nationality,position,age,season,appearances,minutes_played,goals,assists,shots,shots_on_target,xg,xa,key_passes,passes_completed,passes_attempted,tackles,interceptions,yellow_cards,red_cards,rating
+1,Bukayo Alvarez,Arsenal,Premier League,Netherlands,Goalkeeper,26,2023-2024,19,1216,0,0,1,0,0.0,0.3,2,492,644,0,0,1,0,7.24
+2,Jordan Martinez,Arsenal,Premier League,Japan,Defender,35,2023-2024,19,1387,2,6,4,4,2.43,6.1,7,1010,1244,48,36,1,0,7.36
+3,Phil Santana,Arsenal,Premier League,Colombia,Forward,27,2023-2024,23,1765,27,2,57,53,27.14,2.58,13,518,698,17,6,2,0,8.04
+4,David Simon,Arsenal,Premier League,Scotland,Goalkeeper,23,2023-2024,35,2348,0,1,0,0,0.0,0.11,4,816,962,0,1,0,0,6.96
+5,Douglas Raya,Arsenal,Premier League,Portugal,Goalkeeper,28,2023-2024,32,2383,0,1,0,0,0.0,0.11,4,700,845,3,4,3,0,7.8
+6,Lucas Kovacic,Arsenal,Premier League,Spain,Defender,20,2023-2024,15,966,1,6,20,2,1.89,6.29,6,914,1023,42,33,5,0,7.04
+7,Nico Maddison,Arsenal,Premier League,England,Midfielder,32,2023-2024,35,2988,5,10,26,21,8.07,12.09,24,2254,2515,76,61,1,0,7.53
+8,Antoine Gonzalez,Arsenal,Premier League,Spain,Goalkeeper,25,2023-2024,19,1623,0,0,0,0,0.0,0.29,2,511,614,1,5,3,0,6.63
+9,Douglas Becker,Arsenal,Premier League,Belgium,Forward,24,2023-2024,24,2132,25,6,106,63,27.36,4.98,18,447,657,27,5,1,0,6.76
+10,Kevin Magalhaes,Arsenal,Premier League,Italy,Midfielder,25,2023-2024,33,2444,9,4,49,16,12.14,4.82,36,2167,2517,85,29,6,0,7.83
+11,Federico Lewandowski,Manchester City,Premier League,Netherlands,Forward,21,2023-2024,18,1179,19,3,98,35,19.87,5.37,43,256,374,5,4,1,0,7.67
+12,Mikel De Bruyne,Manchester City,Premier League,Croatia,Defender,23,2023-2024,12,1062,2,6,11,8,3.32,8.32,10,534,637,17,31,1,0,6.59
+13,Lucas Saliba,Manchester City,Premier League,Spain,Forward,23,2023-2024,28,1745,10,2,43,36,14.04,4.45,26,417,544,21,21,2,0,7.11
+14,Bruno Junior,Manchester City,Premier League,Brazil,Midfielder,30,2023-2024,33,2597,8,7,22,8,10.36,10.27,33,1827,2193,61,30,2,0,6.9
+15,Thibaut Martinez,Manchester City,Premier League,England,Midfielder,34,2023-2024,33,2761,5,12,21,9,6.81,15.44,35,1976,2352,79,42,5,0,8.32
+16,Phil Simon,Manchester City,Premier League,Italy,Goalkeeper,31,2023-2024,13,781,0,0,1,0,0.0,0.39,3,325,423,3,4,0,0,7.72
+17,Gabriel Haaland,Manchester City,Premier League,Poland,Defender,29,2023-2024,29,1864,1,0,12,1,1.67,0.47,13,1741,1940,55,41,3,0,6.54
+18,Martin Vicario,Manchester City,Premier League,Italy,Midfielder,25,2023-2024,17,1408,2,8,14,9,3.91,10.0,25,774,874,32,23,3,0,8.44
+19,Marc Magalhaes,Liverpool,Premier League,Scotland,Midfielder,30,2023-2024,22,1919,2,6,23,20,3.4,7.21,43,1579,1720,33,29,5,0,6.68
+20,Marcus Saliba,Liverpool,Premier League,Portugal,Forward,35,2023-2024,23,1667,26,6,91,73,34.02,6.55,21,642,826,23,6,1,0,8.58
+21,Thibaut Raya,Liverpool,Premier League,Croatia,Defender,27,2023-2024,29,2441,2,2,8,8,3.09,2.9,10,1615,1789,90,78,3,0,6.95
+22,Phil Bellingham,Liverpool,Premier League,Netherlands,Midfielder,27,2023-2024,37,2433,1,2,26,16,3.08,5.27,34,2291,2636,59,38,6,0,8.3
+23,Nico Guimaraes,Liverpool,Premier League,Denmark,Goalkeeper,23,2023-2024,26,1597,0,0,0,0,0.0,0.18,8,636,809,4,4,2,0,7.65
+24,William Dovbyk,Liverpool,Premier League,Senegal,Forward,23,2023-2024,26,1755,12,11,72,50,14.09,12.89,24,587,811,24,7,1,0,7.47
+25,Jordan Isak,Liverpool,Premier League,Japan,Defender,20,2023-2024,25,1739,3,3,6,6,3.94,4.12,15,1291,1613,57,46,7,0,8.03
+26,Gabriel Alvarez,Liverpool,Premier League,Colombia,Forward,35,2023-2024,19,1409,13,7,100,19,16.01,10.56,41,332,407,22,3,3,0,8.03
+27,Marc Oyarzabal,Liverpool,Premier League,Nigeria,Goalkeeper,22,2023-2024,17,1044,0,1,0,0,0.0,0.08,6,397,478,3,2,3,0,6.51
+28,Robert Guimaraes,Chelsea,Premier League,Spain,Goalkeeper,20,2023-2024,36,2192,0,0,0,0,0.0,0.34,3,629,892,0,4,1,0,6.76
+29,Son Oblak,Chelsea,Premier League,Argentina,Midfielder,21,2023-2024,21,1325,1,6,35,13,2.07,9.65,19,1581,1763,32,41,5,0,7.26
+30,Unai Morata,Chelsea,Premier League,Denmark,Forward,20,2023-2024,32,2236,18,8,56,50,25.05,11.85,18,999,1327,29,14,4,0,7.78
+31,Savinho Oyarzabal,Chelsea,Premier League,Italy,Forward,36,2023-2024,22,1863,7,5,89,27,10.67,6.85,20,435,582,17,16,2,0,8.46
+32,William Saka,Chelsea,Premier League,Portugal,Midfielder,34,2023-2024,14,937,7,9,52,31,7.73,12.52,21,715,850,38,18,3,0,7.3
+33,Nico Alvarez,Chelsea,Premier League,Norway,Midfielder,35,2023-2024,23,1848,5,6,31,12,5.13,7.5,22,1225,1371,44,41,5,0,7.6
+34,Mohamed Luiz,Chelsea,Premier League,Netherlands,Midfielder,27,2023-2024,23,1499,1,13,45,5,3.36,16.74,43,1668,1920,27,36,3,0,7.44
+35,Erling Junior,Chelsea,Premier League,Germany,Defender,33,2023-2024,38,2352,3,0,5,3,4.87,0.72,13,1956,2172,101,98,8,0,7.44
+36,Alisson Ter Stegen,Tottenham,Premier League,Colombia,Midfielder,19,2023-2024,35,2200,4,12,27,12,5.07,11.83,35,2375,2672,72,46,1,0,7.94
+37,Kevin Pickford,Tottenham,Premier League,Italy,Forward,25,2023-2024,37,3069,23,11,73,55,22.13,9.85,17,511,727,30,26,5,0,8.54
+38,Virgil Kubo,Tottenham,Premier League,Croatia,Forward,27,2023-2024,20,1490,20,8,55,44,19.5,8.27,16,561,705,24,13,0,0,8.04
+39,Alisson Haaland,Tottenham,Premier League,Senegal,Midfielder,23,2023-2024,28,2209,5,4,42,25,8.07,6.16,20,1904,2278,59,53,3,0,7.36
+40,Savinho Salah,Tottenham,Premier League,Italy,Goalkeeper,28,2023-2024,22,1393,0,1,1,0,0.0,0.33,1,625,732,3,3,0,0,6.91
+41,Jan Dovbyk,Tottenham,Premier League,Portugal,Forward,19,2023-2024,20,1518,14,8,101,26,14.88,11.71,30,277,367,8,7,0,0,6.93
+42,Takefusa Camavinga,Tottenham,Premier League,Denmark,Defender,27,2023-2024,34,2309,3,3,17,11,2.79,4.63,4,1631,1812,101,63,6,0,7.31
+43,Rodrygo Tchouameni,Tottenham,Premier League,Poland,Goalkeeper,27,2023-2024,30,2669,0,1,0,0,0.0,0.18,8,534,716,4,3,3,0,7.62
+44,Alisson Merino,Tottenham,Premier League,Japan,Defender,25,2023-2024,13,899,3,5,15,13,4.46,5.47,13,747,887,21,28,2,0,7.23
+45,Martin Martinez,Aston Villa,Premier League,France,Defender,22,2023-2024,27,2231,2,2,22,3,3.64,3.35,17,1423,1769,41,44,5,0,7.69
+46,Mohamed Simon,Aston Villa,Premier League,Nigeria,Forward,21,2023-2024,17,1362,5,1,71,13,6.84,2.62,27,501,711,10,4,4,0,7.94
+47,Takefusa Courtois,Aston Villa,Premier League,Netherlands,Defender,22,2023-2024,26,2040,3,2,10,7,3.62,2.71,11,1687,1824,80,44,8,0,6.82
+48,Artem Van Dijk,Aston Villa,Premier League,Croatia,Forward,25,2023-2024,30,2112,14,12,76,20,20.28,12.29,20,909,1160,35,15,1,0,7.4
+49,Thibaut Junior,Aston Villa,Premier League,Germany,Defender,22,2023-2024,32,2519,2,6,3,3,2.52,6.41,9,1421,1575,100,58,5,0,6.91
+50,Rodrygo Alvarez,Aston Villa,Premier League,Germany,Forward,28,2023-2024,26,2286,9,4,84,49,12.3,4.67,20,560,736,27,16,0,0,7.64
+51,Thibaut Guimaraes,Aston Villa,Premier League,Nigeria,Midfielder,20,2023-2024,34,2337,7,3,25,8,9.36,4.38,21,2159,2495,82,71,5,0,8.01
+52,Mohamed Kovacic,Aston Villa,Premier League,Italy,Defender,31,2023-2024,13,1040,1,3,8,6,1.85,4.91,4,658,788,21,28,2,0,7.53
+53,Erling Lewandowski,Aston Villa,Premier League,Brazil,Goalkeeper,25,2023-2024,37,2825,0,0,1,0,0.0,0.08,4,674,904,1,4,0,0,7.78
+54,Gabriel Junior,Aston Villa,Premier League,Germany,Defender,23,2023-2024,33,2809,1,0,8,6,1.25,1.02,1,1692,1972,69,68,2,0,6.85
+55,Federico Vicario,Newcastle United,Premier League,Belgium,Goalkeeper,34,2023-2024,26,2045,0,0,0,0,0.0,0.4,7,560,686,3,5,3,0,6.85
+56,Kevin Fernandez,Newcastle United,Premier League,Colombia,Defender,26,2023-2024,32,2463,2,3,11,9,2.72,3.96,23,2104,2338,90,48,7,0,6.87
+57,Savinho Zubimendi,Newcastle United,Premier League,Germany,Midfielder,31,2023-2024,22,1592,11,6,44,15,13.27,6.29,22,1664,1862,34,34,1,0,7.67
+58,Unai Palmer,Newcastle United,Premier League,Uruguay,Midfielder,31,2023-2024,33,2880,7,13,20,11,8.48,15.69,37,1599,1871,74,49,1,0,7.69
+59,William Ter Stegen,Newcastle United,Premier League,England,Forward,35,2023-2024,31,2695,27,5,55,37,29.14,7.64,14,877,1137,11,10,5,0,6.76
+60,Alvaro Williams,Newcastle United,Premier League,Norway,Defender,32,2023-2024,17,1202,2,6,2,2,2.58,7.19,21,921,1075,40,24,2,0,6.68
+61,Mateo Vicario,Newcastle United,Premier League,Spain,Forward,27,2023-2024,19,1357,24,1,49,35,24.77,1.92,9,258,345,18,5,1,0,8.11
+62,Kevin Zubimendi,Newcastle United,Premier League,Japan,Midfielder,19,2023-2024,12,879,2,7,39,20,3.7,8.63,27,923,1010,28,20,1,0,6.8
+63,Ederson Zubimendi,Newcastle United,Premier League,France,Forward,34,2023-2024,24,2045,28,6,81,54,33.57,8.31,22,618,791,27,8,1,0,7.21
+64,David Heung-min,Newcastle United,Premier League,Argentina,Defender,20,2023-2024,36,2815,3,6,24,12,4.64,6.91,10,2038,2520,106,79,5,0,7.45
+65,Lamine Kubo,Brighton,Premier League,Spain,Goalkeeper,32,2023-2024,13,919,0,0,0,0,0.0,0.26,2,312,391,3,3,0,0,7.53
+66,Pedri Oblak,Brighton,Premier League,Denmark,Defender,33,2023-2024,16,1404,3,0,5,5,3.42,1.98,16,846,1032,33,26,7,0,7.04
+67,Jan Martinez,Brighton,Premier League,France,Goalkeeper,28,2023-2024,22,1380,0,1,0,0,0.0,0.1,3,394,566,1,2,2,0,7.38
+68,Cole Oblak,Brighton,Premier League,Belgium,Forward,20,2023-2024,29,2056,15,3,51,47,16.66,5.53,23,511,718,12,9,0,0,8.28
+69,Unai Lewandowski,Brighton,Premier League,Colombia,Goalkeeper,22,2023-2024,24,1547,0,0,1,0,0.0,0.31,3,614,801,3,2,1,0,7.25
+70,Alexander Becker,Brighton,Premier League,Belgium,Forward,25,2023-2024,37,3061,11,6,92,45,16.03,7.56,17,1136,1486,27,8,5,0,7.44
+71,Jordan Saliba,Brighton,Premier League,Belgium,Goalkeeper,21,2023-2024,14,1149,0,0,0,0,0.0,0.36,3,356,464,1,3,2,0,6.98
+72,Lucas Morata,Brighton,Premier League,Croatia,Forward,25,2023-2024,14,992,5,6,42,31,7.07,7.81,19,365,492,4,3,0,0,8.37
+73,Virgil Yamal,Brighton,Premier League,Belgium,Forward,25,2023-2024,15,920,18,11,101,27,19.79,12.18,34,306,393,8,9,0,0,7.18
+74,Unai Vicario,Real Madrid,La Liga,Denmark,Defender,20,2023-2024,23,1425,4,4,20,12,4.18,3.48,12,889,1051,36,47,4,0,7.51
+75,Cole Haaland,Real Madrid,La Liga,Scotland,Midfielder,29,2023-2024,22,1839,3,14,42,25,3.84,14.93,26,1176,1400,38,45,1,0,7.19
+76,Gabriel Paqueta,Real Madrid,La Liga,Spain,Forward,26,2023-2024,36,2835,14,6,45,39,14.96,8.25,39,758,1043,21,22,5,0,8.55
+77,Phil Tchouameni,Real Madrid,La Liga,France,Midfielder,31,2023-2024,25,1936,3,10,31,13,3.68,11.59,30,1690,1956,58,22,6,0,7.27
+78,Vinicius Simon,Real Madrid,La Liga,France,Forward,19,2023-2024,33,2590,16,9,61,22,17.26,11.11,17,917,1254,21,24,0,0,8.06
+79,Antoine Dovbyk,Real Madrid,La Liga,Poland,Midfielder,20,2023-2024,16,1205,7,7,34,14,8.84,8.55,24,958,1068,41,26,2,0,7.14
+80,Ollie Palmer,Real Madrid,La Liga,France,Forward,22,2023-2024,26,1690,27,8,63,52,33.23,9.47,18,511,646,23,12,0,0,8.28
+81,Takefusa Rice,Real Madrid,La Liga,Scotland,Defender,29,2023-2024,30,2120,4,1,5,5,4.81,1.93,19,1163,1425,62,74,2,0,7.59
+82,Cole Santana,Real Madrid,La Liga,Argentina,Midfielder,36,2023-2024,36,3168,7,10,20,20,6.75,10.63,31,2602,2862,97,33,3,0,8.42
+83,Jan Gonzalez,Barcelona,La Liga,France,Defender,35,2023-2024,28,2200,4,4,6,6,5.55,5.22,10,1044,1289,80,66,5,0,7.73
+84,Thibaut Simon,Barcelona,La Liga,Senegal,Forward,18,2023-2024,32,2426,25,5,111,45,32.29,5.07,12,757,1026,23,12,2,0,7.33
+85,Federico Griezmann,Barcelona,La Liga,Brazil,Midfielder,30,2023-2024,36,2546,9,3,39,16,9.91,4.01,37,2637,3060,98,38,7,0,7.7
+86,Ollie Maddison,Barcelona,La Liga,Denmark,Midfielder,33,2023-2024,26,1936,5,9,16,6,7.4,13.09,22,1145,1351,69,50,3,0,8.21
+87,Cole Junior,Barcelona,La Liga,Croatia,Forward,29,2023-2024,23,1410,6,10,55,34,7.46,12.44,18,444,545,18,9,2,0,7.43
+88,Ollie Oblak,Barcelona,La Liga,Croatia,Defender,34,2023-2024,28,1712,0,1,15,8,0.99,1.82,11,1213,1426,78,77,5,0,7.31
+89,Jordan Raya,Barcelona,La Liga,Senegal,Forward,27,2023-2024,38,2298,15,11,54,46,19.6,14.71,25,838,1169,25,30,0,0,7.04
+90,Federico Ter Stegen,Barcelona,La Liga,Brazil,Midfielder,30,2023-2024,38,3030,1,11,18,7,1.93,12.36,53,2874,3152,100,77,6,1,6.86
+91,William Gavi,Barcelona,La Liga,Denmark,Goalkeeper,33,2023-2024,24,1658,0,0,0,0,0.0,0.36,6,533,711,2,4,3,0,6.75
+92,Alexander Gonzalez,Atletico Madrid,La Liga,Portugal,Defender,27,2023-2024,34,2735,2,3,19,14,2.77,4.23,14,2257,2507,56,55,1,0,7.64
+93,Inaki Martinez,Atletico Madrid,La Liga,Senegal,Defender,26,2023-2024,18,1185,4,2,26,8,4.1,2.73,9,845,1048,51,40,8,1,7.73
+94,William Maddison,Atletico Madrid,La Liga,Senegal,Goalkeeper,31,2023-2024,27,2129,0,0,0,0,0.0,0.11,1,613,879,4,1,0,0,6.65
+95,Declan Zubimendi,Atletico Madrid,La Liga,Argentina,Goalkeeper,33,2023-2024,35,3076,0,0,0,0,0.0,0.0,2,717,973,4,4,3,0,6.59
+96,Savinho Goes,Atletico Madrid,La Liga,Germany,Midfielder,24,2023-2024,22,1423,8,12,34,30,8.97,16.76,27,1562,1725,51,43,4,0,6.76
+97,Mohamed Watkins,Atletico Madrid,La Liga,Senegal,Midfielder,22,2023-2024,22,1917,1,6,35,8,2.01,8.25,24,1514,1769,41,18,6,0,7.18
+98,Emiliano Magalhaes,Atletico Madrid,La Liga,Germany,Defender,27,2023-2024,32,2770,2,2,9,4,2.72,3.52,17,1926,2215,86,87,4,0,7.59
+99,Phil Saliba,Atletico Madrid,La Liga,Denmark,Midfielder,32,2023-2024,34,2396,10,3,23,23,11.7,4.63,46,2165,2604,53,64,4,1,7.57
+100,Savinho Fernandez,Atletico Madrid,La Liga,Japan,Goalkeeper,34,2023-2024,26,1985,0,1,1,0,0.0,0.32,1,489,670,0,5,1,0,6.46
+101,Guglielmo Foden,Atletico Madrid,La Liga,Spain,Defender,35,2023-2024,14,1240,3,0,16,5,4.56,1.4,11,708,825,31,27,2,0,7.56
+102,Marc Griezmann,Real Sociedad,La Liga,Argentina,Goalkeeper,21,2023-2024,29,2070,0,0,1,0,0.0,0.39,1,622,909,2,3,3,0,7.55
+103,Savinho Griezmann,Real Sociedad,La Liga,Italy,Defender,22,2023-2024,18,1569,0,0,19,12,1.36,0.41,1,1112,1267,28,34,1,0,6.87
+104,Erling Fernandez,Real Sociedad,La Liga,Belgium,Defender,34,2023-2024,19,1589,4,2,11,8,6.21,2.93,2,1315,1425,37,47,8,1,7.05
+105,Mateo Gavi,Real Sociedad,La Liga,Japan,Midfielder,31,2023-2024,16,1099,3,14,47,18,3.64,18.56,27,1120,1222,36,28,2,0,7.08
+106,Marc Salah,Real Sociedad,La Liga,Uruguay,Midfielder,32,2023-2024,14,1057,4,2,31,16,5.98,3.94,25,794,945,26,20,1,0,6.96
+107,Eduardo Paqueta,Real Sociedad,La Liga,Colombia,Defender,25,2023-2024,34,2241,1,4,10,7,2.0,4.17,18,1474,1630,93,67,6,0,7.09
+108,Declan Raya,Real Sociedad,La Liga,Brazil,Midfielder,25,2023-2024,12,810,10,11,46,19,9.77,13.97,56,854,935,24,17,7,0,8.44
+109,Savinho Maddison,Real Sociedad,La Liga,Argentina,Midfielder,29,2023-2024,16,1294,8,4,52,28,11.01,6.06,14,1018,1222,39,19,1,0,6.62
+110,Antoine De Bruyne,Real Sociedad,La Liga,Senegal,Midfielder,33,2023-2024,12,722,9,8,19,9,10.16,11.35,29,596,654,30,13,2,0,7.6
+111,Vinicius Zubimendi,Real Sociedad,La Liga,Uruguay,Midfielder,20,2023-2024,24,1759,4,13,28,13,6.49,17.79,25,1385,1615,63,49,1,0,7.94
+112,Nico Martinez,Athletic Bilbao,La Liga,Poland,Midfielder,28,2023-2024,15,1289,1,5,24,23,2.61,5.3,17,851,933,28,12,2,0,8.03
+113,Kevin Gonzalez,Athletic Bilbao,La Liga,Poland,Midfielder,23,2023-2024,19,1452,7,12,51,17,8.65,17.07,38,1076,1304,49,22,7,1,7.75
+114,Pedri Rice,Athletic Bilbao,La Liga,Nigeria,Midfielder,26,2023-2024,27,1798,9,8,46,14,11.47,9.29,40,1180,1425,41,45,6,0,6.89
+115,Pedri Morata,Athletic Bilbao,La Liga,France,Midfielder,21,2023-2024,12,1048,8,7,35,11,7.7,9.56,23,508,613,31,11,5,0,7.22
+116,Marcus Yamal,Athletic Bilbao,La Liga,Croatia,Midfielder,31,2023-2024,36,2248,9,5,52,14,10.51,6.34,17,1849,2142,69,47,4,0,7.29
+117,Federico Simon,Athletic Bilbao,La Liga,Colombia,Defender,33,2023-2024,31,2035,0,1,0,0,1.01,2.02,14,2022,2230,84,72,3,0,7.47
+118,Artem Gavi,Athletic Bilbao,La Liga,Croatia,Defender,23,2023-2024,22,1505,3,4,13,9,3.78,5.31,13,1274,1548,65,25,8,0,6.84
+119,Martin Pickford,Athletic Bilbao,La Liga,Brazil,Midfielder,33,2023-2024,32,2201,5,12,24,18,6.23,17.74,56,2405,2637,82,51,5,1,8.44
+120,Mohamed Bellingham,Girona,La Liga,Argentina,Defender,29,2023-2024,32,2488,4,5,14,10,3.36,5.35,23,1875,2144,72,58,7,0,7.59
+121,Robert Rice,Girona,La Liga,Germany,Defender,33,2023-2024,21,1513,0,0,5,2,1.22,0.89,7,1184,1408,48,25,2,1,7.05
+122,Emiliano Maddison,Girona,La Liga,Denmark,Defender,25,2023-2024,17,1292,2,4,16,5,3.3,4.34,4,1004,1142,35,32,7,0,7.63
+123,Vinicius Camavinga,Girona,La Liga,Poland,Defender,20,2023-2024,15,1247,4,1,14,7,4.35,2.4,11,833,980,33,34,2,0,7.85
+124,Emiliano Camavinga,Girona,La Liga,Colombia,Defender,27,2023-2024,30,1873,1,2,4,3,1.45,2.36,6,1647,1938,53,64,3,0,7.28
+125,James Gavi,Girona,La Liga,Colombia,Defender,32,2023-2024,13,1106,0,3,3,3,0.86,4.3,17,686,835,36,14,4,0,6.94
+126,Son Kubo,Girona,La Liga,Senegal,Midfielder,36,2023-2024,29,2169,10,3,37,34,12.65,6.11,47,1537,1673,40,38,3,0,6.66
+127,Robert Salah,Girona,La Liga,Germany,Midfielder,32,2023-2024,36,3007,4,14,36,26,5.53,18.48,49,1684,1921,77,45,5,0,7.21
+128,Rodrygo Raya,Girona,La Liga,Denmark,Midfielder,26,2023-2024,33,2760,3,14,39,4,5.83,15.25,28,2084,2309,87,69,4,0,7.7
+129,Jan Williams,Girona,La Liga,Nigeria,Midfielder,30,2023-2024,14,1097,2,8,44,25,4.2,11.25,18,1026,1144,39,13,6,0,7.81
+130,Kevin Becker,Real Betis,La Liga,Portugal,Midfielder,30,2023-2024,25,2098,8,6,38,17,9.14,8.71,19,1076,1297,59,21,1,0,6.9
+131,Marcus Oyarzabal,Real Betis,La Liga,Brazil,Midfielder,24,2023-2024,32,2200,5,3,38,13,5.99,4.5,27,2195,2479,83,31,1,0,6.75
+132,Mateo Pickford,Real Betis,La Liga,England,Defender,32,2023-2024,12,962,0,6,4,3,0.7,7.14,17,566,693,20,33,3,1,7.4
+133,Inaki Griezmann,Real Betis,La Liga,Brazil,Defender,24,2023-2024,25,1946,3,6,4,3,2.69,7.56,16,1055,1268,76,32,4,0,7.46
+134,Guglielmo Rice,Real Betis,La Liga,Portugal,Midfielder,27,2023-2024,28,2172,4,13,39,13,6.3,17.16,30,1431,1646,71,26,5,0,6.62
+135,Pedri Fernandez,Real Betis,La Liga,Poland,Midfielder,30,2023-2024,25,1764,11,4,51,35,10.8,4.77,26,1500,1768,62,46,4,0,6.76
+136,Vinicius Salah,Real Betis,La Liga,France,Defender,27,2023-2024,28,2427,1,4,13,10,2.33,4.72,11,1097,1319,66,37,8,0,6.59
+137,Virgil Saka,Real Betis,La Liga,England,Defender,22,2023-2024,17,1264,2,4,25,6,1.95,5.34,4,847,936,40,34,2,0,8.06
+138,Takefusa Kubo,Real Betis,La Liga,Uruguay,Defender,34,2023-2024,13,968,4,1,9,6,5.86,1.57,1,553,607,18,21,1,0,7.11
+139,James Haaland,Real Betis,La Liga,Japan,Midfielder,35,2023-2024,19,1317,7,13,37,15,9.56,13.86,28,1060,1178,24,27,1,0,8.25
+140,Savinho Saka,Villarreal,La Liga,Portugal,Midfielder,29,2023-2024,21,1603,5,13,30,19,7.18,19.83,71,1086,1301,51,16,2,0,7.81

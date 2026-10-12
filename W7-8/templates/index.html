@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Intelligence — Demand Forecasting & Load Optimization Lab</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Plotly.js Interactive Chart Engine -->
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.0">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ====================================================================
+         LEFT CHARCOAL SIDEBAR
+         ==================================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#overview" class="brand-wrap">
+          <div class="brand-icon">
+            <i data-lucide="zap"></i>
+          </div>
+          <div>
+            <div class="brand-name">Energy Intelligence</div>
+            <span class="brand-tag">DEMAND OPTIMIZATION</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">NAVIGATION</div>
+        <ul class="nav-list">
+          <li>
+            <a href="#overview" class="nav-item active" data-section="section-overview">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Overview</span>
+            </a>
+          </li>
+          <li>
+            <a href="#explorer" class="nav-item" data-section="section-explorer">
+              <i data-lucide="database"></i>
+              <span>Data Explorer</span>
+            </a>
+          </li>
+          <li>
+            <a href="#forecast" class="nav-item" data-section="section-forecast">
+              <i data-lucide="trending-up"></i>
+              <span>Forecast Lab</span>
+            </a>
+          </li>
+          <li>
+            <a href="#arena" class="nav-item" data-section="section-arena">
+              <i data-lucide="swords"></i>
+              <span>Model Arena</span>
+            </a>
+          </li>
+          <li>
+            <a href="#patterns" class="nav-item" data-section="section-patterns">
+              <i data-lucide="activity"></i>
+              <span>Demand Patterns</span>
+            </a>
+          </li>
+          <li>
+            <a href="#peaks" class="nav-item" data-section="section-peaks">
+              <i data-lucide="alert-triangle"></i>
+              <span>Peak & Anomalies</span>
+            </a>
+          </li>
+          <li>
+            <a href="#optimization" class="nav-item" data-section="section-optimization">
+              <i data-lucide="sliders"></i>
+              <span>Optimization Lab</span>
+            </a>
+          </li>
+          <li>
+            <a href="#scenarios" class="nav-item" data-section="section-scenarios">
+              <i data-lucide="git-compare"></i>
+              <span>Scenario Comparison</span>
+            </a>
+          </li>
+          <li>
+            <a href="#experiments" class="nav-item" data-section="section-experiments">
+              <i data-lucide="file-text"></i>
+              <span>Experiments & Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="#settings" class="nav-item" data-section="section-settings">
+              <i data-lucide="settings"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="dataset-pill">
+          <span class="status-dot"></span>
+          <span id="sidebarStatusText">Tetouan Sample Dataset</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN VIEWPORT
+         ==================================================================== -->
+    <div class="main-wrapper">
+
+      <!-- TOP STICKY BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Toggle menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="breadcrumbs">
+            <span class="page-title" id="pageTitle">Overview</span>
+            <span class="subtitle-chip" id="pageSubtitle">Energy Intelligence Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="target-select-wrap">
+            <label for="globalTargetSelect"><i data-lucide="crosshair" style="width:14px;height:14px;display:inline;"></i> Target:</label>
+            <select id="globalTargetSelect" class="select-input">
+              <option value="Zone1Power">Zone 1 Power</option>
+              <option value="Zone2Power">Zone 2 Power</option>
+              <option value="Zone3Power">Zone 3 Power</option>
+            </select>
+          </div>
+          <button class="icon-btn" onclick="location.reload()" title="Refresh Application">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT AREA -->
+      <main class="content-area">
+
+        <!-- ================================================================
+             SECTION 1: OVERVIEW
+             ================================================================ -->
+        <section class="page-section active" id="section-overview">
+          <div class="hero-card">
+            <div class="hero-pill">
+              <i data-lucide="shield-check"></i> ML Forecasting & SciPy Optimization
+            </div>
+            <h1 class="hero-title">Predictive Demand & Load Shifting Intelligence</h1>
+            <p class="hero-desc">
+              Accurately forecast 24-hour electricity load, benchmark machine learning regressors against seasonal baselines,
+              and optimize flexible electric demand (e.g. EV fleets, storage) to reduce costly peak surcharges using constrained linear programming.
+            </p>
+            <div class="hero-actions">
+              <a href="#forecast" class="btn btn-primary">
+                <i data-lucide="trending-up"></i> Launch 24h Forecast
+              </a>
+              <a href="#optimization" class="btn btn-secondary">
+                <i data-lucide="sliders"></i> Run Load Optimizer
+              </a>
+              <a href="#explorer" class="btn btn-secondary">
+                <i data-lucide="database"></i> Inspect Dataset
+              </a>
+            </div>
+          </div>
+
+          <!-- Overview KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box teal">
+                <i data-lucide="layers"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Active Records</span>
+                <span class="kpi-value" id="overviewDatasetRows">—</span>
+                <span class="kpi-subtext" id="overviewDatasetFreq">Hourly Mean</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald">
+                <i data-lucide="clock"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Next-Hour Forecast</span>
+                <span class="kpi-value" id="overviewNextHour">—</span>
+                <span class="kpi-subtext">Recursive Extrapolation</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box sky">
+                <i data-lucide="trending-up"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Expected 24h Peak</span>
+                <span class="kpi-value" id="overviewExpectedPeak">—</span>
+                <span class="kpi-subtext">Diurnal Max Demand</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box amber">
+                <i data-lucide="award"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Held-out Test MAE</span>
+                <span class="kpi-value" id="overviewLastMae">—</span>
+                <span class="kpi-subtext">Unbiased Split Error</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box rose">
+                <i data-lucide="zap"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Simulated Savings</span>
+                <span class="kpi-value" id="overviewOptSavings">—</span>
+                <span class="kpi-subtext">Via Load Shifting</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Timeline Chart Panel -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title"><i data-lucide="activity" class="text-teal"></i> Historical Demand & Forward Forecast Timeline</h3>
+                <span class="panel-subtitle">Latest 48 hours of historical actual observations aligned with future 24-hour predictions and 95% confidence envelope.</span>
+              </div>
+            </div>
+            <div id="chartOverviewTimeline" class="chart-container"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 2: DATA EXPLORER
+             ================================================================ -->
+        <section class="page-section" id="section-explorer">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Data Explorer & Quality Diagnostics</h2>
+              <p class="section-desc">Inspect time-series intervals, verify data completeness, or ingest custom CSV energy logs.</p>
+            </div>
+          </div>
+
+          <!-- Switcher & Upload Controls -->
+          <div class="form-grid-2 mb-6">
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="hard-drive" class="text-teal"></i> Switch Built-in Dataset</h3>
+              </div>
+              <div class="form-group">
+                <label for="sampleDatasetSelect">Select Pre-configured Energy Dataset:</label>
+                <select id="sampleDatasetSelect" class="form-control">
+                  <option value="sample">Tetouan Calibrated Sample (60 Days @ 10-Min)</option>
+                  <option value="processed">Tetouan Hourly Aggregations (1-Hour Means)</option>
+                </select>
+              </div>
+              <p class="text-muted" style="font-size:12.5px;">Switching loads sample data instantly without external network requests.</p>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="upload-cloud" class="text-sky"></i> Ingest Custom CSV Dataset</h3>
+              </div>
+              <form id="datasetUploadForm">
+                <div class="form-group">
+                  <label for="csvFileInput">Choose Local CSV File (Max 25MB):</label>
+                  <input type="file" id="csvFileInput" class="form-control" accept=".csv" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i data-lucide="upload"></i> Validate & Ingest CSV
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Quality Diagnostics KPI Grid -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box teal"><i data-lucide="hash"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Rows</span>
+                <span class="kpi-value" id="kpiRowCount">—</span>
+                <span class="kpi-subtext">Records in memory</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box sky"><i data-lucide="clock"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Interval Resolution</span>
+                <span class="kpi-value" id="kpiFrequency">—</span>
+                <span class="kpi-subtext">Detected sampling rate</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald"><i data-lucide="check-circle"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Completeness Score</span>
+                <span class="kpi-value" id="kpiCompleteness">—</span>
+                <span class="kpi-subtext">Valid cell ratio</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box amber"><i data-lucide="copy"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Duplicates</span>
+                <span class="kpi-value" id="kpiDuplicates">—</span>
+                <span class="kpi-subtext">Repeated timestamps</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box rose"><i data-lucide="help-circle"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Missing Values</span>
+                <span class="kpi-value" id="kpiMissing">—</span>
+                <span class="kpi-subtext">Imputed via interpolation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview Table -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="table"></i> Dataset Head Preview (First 15 Rows)</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead id="previewTableHeader"></thead>
+                <tbody id="previewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 3: FORECAST LAB
+             =============================================================== -->
+        <section class="page-section" id="section-forecast">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Forecast Lab & Model Execution</h2>
+              <p class="section-desc">Train machine learning algorithms on chronological splits and generate 24-hour predictions.</p>
+            </div>
+          </div>
+
+          <!-- Configuration & Action Toolbar -->
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="sliders"></i> Model Training & Horizon Controls</h3>
+            </div>
+            <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+              <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+                  <input type="checkbox" class="model-checkbox" value="seasonal_naive" checked> Seasonal Naive (24h Baseline)
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+                  <input type="checkbox" class="model-checkbox" value="ridge" checked> Ridge Regression
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+                  <input type="checkbox" class="model-checkbox" value="random_forest" checked> Random Forest
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+                  <input type="checkbox" class="model-checkbox" value="hist_gradient_boosting" checked> HistGradientBoosting
+                </label>
+              </div>
+
+              <div style="margin-left:auto;display:flex;gap:12px;">
+                <button class="btn btn-primary" id="trainModelsBtn">
+                  <i data-lucide="play"></i> Train & Evaluate Models
+                </button>
+                <button class="btn btn-secondary" id="generateForecastBtn">
+                  <i data-lucide="trending-up"></i> Generate 24h Forecast
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Forecast Summary KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box teal"><i data-lucide="arrow-up-right"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Peak Demand</span>
+                <span class="kpi-value" id="forecastPeakVal">—</span>
+                <span class="kpi-subtext" id="forecastPeakTime">Max hour</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald"><i data-lucide="bar-chart-2"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Mean Demand</span>
+                <span class="kpi-value" id="forecastMeanVal">—</span>
+                <span class="kpi-subtext">Average over horizon</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box sky"><i data-lucide="arrow-down-right"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Min Demand</span>
+                <span class="kpi-value" id="forecastMinVal">—</span>
+                <span class="kpi-subtext">Base trough load</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box amber"><i data-lucide="shield"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Held-out MAE</span>
+                <span class="kpi-value" id="kpiTestMae">—</span>
+                <span class="kpi-subtext">Test partition error</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Forecast Curve -->
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="trending-up" class="text-teal"></i> 24-Hour Forward Forecast Curve</h3>
+            </div>
+            <div id="chartForecastCurve" class="chart-container"></div>
+          </div>
+
+          <!-- Diagnostic Plots -->
+          <div class="form-grid-2">
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="scatter-chart" class="text-sky"></i> Actual vs Predicted Scatter</h3>
+              </div>
+              <div id="chartActualVsPredicted" class="chart-container"></div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="bar-chart" class="text-emerald"></i> Residual Distribution Histogram</h3>
+              </div>
+              <div id="chartResidualDist" class="chart-container"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 4: MODEL ARENA
+             ================================================================ -->
+        <section class="page-section" id="section-arena">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Model Arena Leaderboard</h2>
+              <p class="section-desc">Rigorous chronological cross-algorithm benchmarking. No data leakage, honest baseline disclosure.</p>
+            </div>
+          </div>
+
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="trophy" class="text-amber"></i> Algorithm Evaluation Rankings</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Model Architecture</th>
+                    <th>Training Time</th>
+                    <th>Validation MAE</th>
+                    <th>Validation RMSE</th>
+                    <th>Validation WAPE</th>
+                    <th>Validation R²</th>
+                    <th>Held-Out Test MAE</th>
+                  </tr>
+                </thead>
+                <tbody id="arenaTableBody">
+                  <tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">Click "Train & Evaluate Models" in Forecast Lab to populate leaderboard.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="bar-chart-3" class="text-teal"></i> Validation Error Comparison</h3>
+            </div>
+            <div id="chartModelArenaBar" class="chart-container"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 5: DEMAND PATTERNS
+             ================================================================ -->
+        <section class="page-section" id="section-patterns">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Demand Patterns & Seasonality</h2>
+              <p class="section-desc">Diurnal load profiles, weekday versus weekend consumption patterns, and 24x7 heatmap.</p>
+            </div>
+          </div>
+
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="sun" class="text-amber"></i> Diurnal Hourly Profile (Weekday vs Weekend)</h3>
+            </div>
+            <div id="chartHourlyProfile" class="chart-container"></div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="grid" class="text-teal"></i> 24x7 Day-Hour Demand Heatmap Matrix</h3>
+            </div>
+            <div id="chartDemandHeatmap" class="chart-container" style="min-height:420px;"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 6: PEAK & ANOMALIES
+             ================================================================ -->
+        <section class="page-section" id="section-peaks">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Peak Demand & Statistical Anomalies</h2>
+              <p class="section-desc">Identify high-cost peak threshold breaches and statistical demand outliers.</p>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="alert-circle" class="text-rose"></i> Top Peak Demand Events (90th Percentile)</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Peak Demand</th>
+                      <th>Excess Over Threshold</th>
+                    </tr>
+                  </thead>
+                  <tbody id="peaksTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="activity" class="text-amber"></i> Statistical Demand Anomalies (Z-Score > 2.5)</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Observed Load</th>
+                      <th>Standard Deviations</th>
+                    </tr>
+                  </thead>
+                  <tbody id="anomaliesTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 7: OPTIMIZATION LAB
+             ================================================================ -->
+        <section class="page-section" id="section-optimization">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Optimization Lab (SciPy linprog)</h2>
+              <p class="section-desc">Simulated demand-side load shifting (EV fleet / industrial storage) to reduce peak and tariff costs.</p>
+            </div>
+          </div>
+
+          <!-- Parameter Configuration Form -->
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="sliders"></i> Flexible Load Parameters</h3>
+            </div>
+
+            <div id="optErrorMsg" style="display:none;background:#fee2e2;border:1px solid #f87171;color:#991b1b;padding:12px;border-radius:6px;margin-bottom:16px;font-size:13px;"></div>
+
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="optRequiredEnergy">Required Energy to Deliver:</label>
+                <div class="range-slider-wrap">
+                  <input type="range" id="optRequiredEnergy" class="range-slider" min="10" max="150" value="60" step="5">
+                  <span class="slider-val" id="optReqEnergyVal">60 kWh</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="optMaxPower">Max Hourly Power Capacity:</label>
+                <div class="range-slider-wrap">
+                  <input type="range" id="optMaxPower" class="range-slider" min="5" max="30" value="12" step="1">
+                  <span class="slider-val" id="optMaxPowerVal">12 kW</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="optPeakPenalty">Peak Penalty Trade-Off (λ):</label>
+                <div class="range-slider-wrap">
+                  <input type="range" id="optPeakPenalty" class="range-slider" min="0" max="2" value="0.5" step="0.1">
+                  <span class="slider-val" id="optPeakPenaltyVal">0.5</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-grid-3 mt-4">
+              <div class="form-group">
+                <label for="optStartHour">Window Start Hour:</label>
+                <input type="number" id="optStartHour" class="form-control" min="0" max="23" value="0">
+              </div>
+
+              <div class="form-group">
+                <label for="optEndHour">Window End Hour:</label>
+                <input type="number" id="optEndHour" class="form-control" min="0" max="23" value="23">
+              </div>
+
+              <div class="form-group">
+                <label>Optimization Objective:</label>
+                <div style="display:flex;gap:14px;align-items:center;margin-top:6px;font-size:13px;">
+                  <label><input type="radio" name="optObjective" value="balanced" checked> Balanced (Cost + Peak)</label>
+                  <label><input type="radio" name="optObjective" value="cost"> Pure Cost Minimization</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label>Unavailable / Forbidden Grid Peak Hours (No Load Allowed):</label>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;">
+                <label><input type="checkbox" class="unavail-hour-checkbox" value="17"> 17:00</label>
+                <label><input type="checkbox" class="unavail-hour-checkbox" value="18" checked> 18:00 (On-Peak)</label>
+                <label><input type="checkbox" class="unavail-hour-checkbox" value="19" checked> 19:00 (On-Peak)</label>
+                <label><input type="checkbox" class="unavail-hour-checkbox" value="20" checked> 20:00 (On-Peak)</label>
+                <label><input type="checkbox" class="unavail-hour-checkbox" value="21"> 21:00</label>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <button class="btn btn-primary" id="runOptimizerBtn">
+                <i data-lucide="zap"></i> Run Constrained Optimization
+              </button>
+            </div>
+          </div>
+
+          <!-- Optimization Outcome KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald"><i data-lucide="trending-down"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Peak Reduction</span>
+                <span class="kpi-value" id="kpiPeakReduction">—</span>
+                <span class="kpi-subtext" id="kpiPeakValues">Before vs After</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box teal"><i data-lucide="dollar-sign"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Cost Savings</span>
+                <span class="kpi-value" id="kpiCostSavings">—</span>
+                <span class="kpi-subtext" id="kpiCostValues">Tariff savings</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box sky"><i data-lucide="check"></i></div>
+              <div class="kpi-info">
+                <span class="kpi-label">Energy Delivered</span>
+                <span class="kpi-value" id="kpiEnergyDelivered">—</span>
+                <span class="kpi-subtext" id="kpiEnergyConserved">Conservation test</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Combined Demand Curve Chart -->
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="activity" class="text-teal"></i> Baseline vs Optimized Combined Demand</h3>
+            </div>
+            <div id="chartOptCombinedSchedule" class="chart-container"></div>
+          </div>
+
+          <!-- Flexible Load Schedule Bars & Tariff Curve -->
+          <div class="form-grid-2">
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="bar-chart" class="text-emerald"></i> Allocated Flexible Energy by Hour</h3>
+              </div>
+              <div id="chartOptFlexibleBars" class="chart-container"></div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="credit-card" class="text-amber"></i> Time-Of-Use Tariff Schedule</h3>
+              </div>
+              <div id="chartOptTariffCurve" class="chart-container"></div>
+            </div>
+          </div>
+
+          <!-- Detailed Schedule Table -->
+          <div class="panel-card mt-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="table"></i> Hourly Optimization Schedule & Tariff Table</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Hour</th>
+                    <th>Tariff</th>
+                    <th>Base Demand</th>
+                    <th>Greedy Baseline</th>
+                    <th>Optimized Flex</th>
+                    <th>Baseline Total</th>
+                    <th>Optimized Total</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="optScheduleTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 8: SCENARIO COMPARISON
+             ================================================================ -->
+        <section class="page-section" id="section-scenarios">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Scenario Comparison & Benchmarks</h2>
+              <p class="section-desc">Evaluate the trade-offs between unmanaged baseline charging, pure cost minimization, and balanced peak-shaving.</p>
+            </div>
+          </div>
+
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="git-compare" class="text-teal"></i> Three-Way Strategy Comparison</h3>
+            </div>
+            <div id="chartScenarioCompare" class="chart-container"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 9: EXPERIMENTS & REPORTS
+             ================================================================ -->
+        <section class="page-section" id="section-experiments">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Experiments & Executive Report Generation</h2>
+              <p class="section-desc">Download standalone analytical reports and review historical experiment tracking records.</p>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <button class="btn btn-primary" id="btnExportHtml">
+                <i data-lucide="download"></i> Download HTML Report
+              </button>
+              <button class="btn btn-secondary" id="btnExportCsv">
+                <i data-lucide="file-spreadsheet"></i> Export Forecast CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="history"></i> Experiment Run History</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Execution Timestamp</th>
+                    <th>Target Metric</th>
+                    <th>Best Model Architecture</th>
+                    <th>Held-Out Test MAE</th>
+                    <th>Held-Out Test RMSE</th>
+                    <th>Held-Out Test WAPE</th>
+                  </tr>
+                </thead>
+                <tbody id="experimentsTableBody">
+                  <tr><td colspan="6" style="text-align:center;color:#64748b;padding:20px;">No experiments recorded yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 10: SETTINGS
+             ================================================================ -->
+        <section class="page-section" id="section-settings">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">System Settings & API Diagnostics</h2>
+              <p class="section-desc">Configuration parameters, Open-Meteo endpoint status, and environment runtime.</p>
+            </div>
+          </div>
+
+          <div class="panel-card mb-6">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="cloud" class="text-sky"></i> Open-Meteo Weather API Connection</h3>
+            </div>
+            <div style="font-size:13.5px;line-height:1.7;">
+              <div><strong>Base URL:</strong> <code>https://api.open-meteo.com/v1/forecast</code></div>
+              <div><strong>Default Coordinates:</strong> Latitude 35.5889° N, Longitude -5.3626° W (Tetouan, Morocco)</div>
+              <div><strong>Timezone:</strong> Africa/Casablanca</div>
+              <div><strong>Fallback Protocol:</strong> Calibrated microclimate generator if disconnected or request times out.</div>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3 class="panel-title"><i data-lucide="cpu" class="text-teal"></i> Python Architecture & Optimization Framework</h3>
+            </div>
+            <div style="font-size:13.5px;line-height:1.7;">
+              <div><strong>Backend:</strong> Python 3 / Flask REST API</div>
+              <div><strong>Optimization Solver:</strong> SciPy <code>scipy.optimize.linprog</code> (HiGHS Simplex / Interior-point)</div>
+              <div><strong>Machine Learning:</strong> scikit-learn (Ridge, RandomForest, HistGradientBoosting, Pipelines)</div>
+              <div><strong>Visualizations:</strong> Plotly.js (Headless client rendering)</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- APPLICATION FOOTER -->
+        <footer class="app-footer">
+          Energy Intelligence — Demand Forecasting & Flexible Load Optimization Lab | Built with Python, Flask, scikit-learn, SciPy, and Plotly.js
+        </footer>
+
+      </main>
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div class="toast-popup" id="toastPopup">
+    <i data-lucide="check" style="width:16px;height:16px;"></i>
+    <span id="toastText">Action completed</span>
+  </div>
+
+  <!-- JAVASCRIPT CLIENT MODULES -->
+  <script src="{{ url_for('static', filename='js/charts.js') }}?v=1.0"></script>
+  <script src="{{ url_for('static', filename='js/dataset.js') }}?v=1.0"></script>
+  <script src="{{ url_for('static', filename='js/forecast.js') }}?v=1.0"></script>
+  <script src="{{ url_for('static', filename='js/optimization.js') }}?v=1.0"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=1.0"></script>
+</body>
+</html>

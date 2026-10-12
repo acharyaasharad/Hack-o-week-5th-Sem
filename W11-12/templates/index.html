@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ app_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="Studio Logo">
+        <div>
+          <div class="brand-title">PCA & t-SNE</div>
+          <div class="brand-subtitle">Visualizer Studio</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-view="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Overview
+        </a>
+        <a class="nav-item" data-view="dataset-explorer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Z"></path></svg>
+          Dataset Explorer
+        </a>
+        <a class="nav-item" data-view="preprocessing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          Preprocessing Lab
+        </a>
+        <a class="nav-item" data-view="pca-studio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          PCA Studio
+        </a>
+        <a class="nav-item" data-view="tsne-studio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          t-SNE Studio
+        </a>
+        <a class="nav-item" data-view="compare-methods">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
+          Compare Methods
+        </a>
+        <a class="nav-item" data-view="point-inspector">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Point Inspector
+        </a>
+        <a class="nav-item" data-view="experiments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          Experiments
+        </a>
+        <a class="nav-item" data-view="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Reports & Export
+        </a>
+        <a class="nav-item" data-view="learn-settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Learn & Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>Framework: <strong>scikit-learn 1.8</strong></div>
+        <div>Version {{ version }}</div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dataset-pill">
+            <span class="status-dot"></span>
+            <span id="topbar-dataset-name">Wine Recognition Dataset</span>
+            <span id="topbar-row-count" style="color:#64748b;">(178 rows)</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button id="btn-reset-workspace" class="btn btn-secondary btn-sm">Reset Dataset</button>
+          <button class="btn btn-primary btn-sm" onclick="App.switchView('compare-methods'); ComparisonManager.runComparison();">Compare PCA & t-SNE</button>
+        </div>
+      </header>
+
+      <div class="content-viewport">
+        <div id="toast-container" style="position:fixed; top:70px; right:30px; z-index:999;"></div>
+
+        <!-- 1. OVERVIEW -->
+        <section id="view-overview" class="view-section active">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dimensionality Reduction Overview</h1>
+              <p class="page-desc">Explore, compress, and visualize complex multi-dimensional datasets with linear PCA and non-linear t-SNE.</p>
+            </div>
+          </div>
+
+          <div class="metric-cards-grid">
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Total Observations</span>
+              <span id="stat-total-records" class="metric-stat-value">178</span>
+              <span class="metric-stat-meta">Validated Rows</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Input Features</span>
+              <span id="stat-total-features" class="metric-stat-value">13</span>
+              <span class="metric-stat-meta">Continuous Dimensions</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">PCA 2D Variance</span>
+              <span id="stat-overview-pca-var" class="metric-stat-value">55.4%</span>
+              <span class="metric-stat-meta">PC1 + PC2 Retention</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">PCA Status</span>
+              <span id="stat-overview-pca-status" class="metric-stat-value">Fitted</span>
+              <span class="metric-stat-meta">Linear Orthogonal</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">t-SNE Status</span>
+              <span id="stat-overview-tsne-status" class="metric-stat-value">Ready</span>
+              <span class="metric-stat-meta">Manifold Embedding</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Principal Component Analysis (PCA)</h3>
+                <button class="btn btn-secondary btn-sm" onclick="App.switchView('pca-studio')">Open Studio</button>
+              </div>
+              <div id="chart-overview-pca" style="height: 380px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">t-Distributed Stochastic Neighbor Embedding (t-SNE)</h3>
+                <button class="btn btn-secondary btn-sm" onclick="App.switchView('tsne-studio')">Open Studio</button>
+              </div>
+              <div id="chart-overview-tsne" style="height: 380px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. DATASET EXPLORER -->
+        <section id="view-dataset-explorer" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dataset Ingestion & Inspection</h1>
+              <p class="page-desc">Load built-in machine learning benchmarks or upload custom CSV datasets.</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Select Dataset or Upload CSV</h3>
+              <div class="form-group">
+                <label class="form-label">Built-in Benchmark Datasets:</label>
+                <select id="select-builtin-dataset" class="form-select">
+                  <option value="wine">Wine Recognition Dataset (178 rows, 13 features)</option>
+                  <option value="iris">Iris Flower Dataset (150 rows, 4 features)</option>
+                  <option value="sample">Synthetic Multi-Cluster Sample (200 rows, 8 features)</option>
+                </select>
+              </div>
+
+              <div id="csv-dropzone" class="dropzone" style="margin-top:16px;">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#4f46e5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p><strong>Click to browse</strong> or drag & drop CSV file</p>
+                <input type="file" id="csv-file-input" accept=".csv" style="display:none;">
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Active Dataset Metadata</h3>
+              <table style="font-size:13px;">
+                <tr><td><strong>Name:</strong></td><td id="meta-dataset-name">Wine Recognition Dataset</td></tr>
+                <tr><td><strong>Source:</strong></td><td id="meta-dataset-source">UCI Machine Learning Repository</td></tr>
+                <tr><td><strong>Rows:</strong></td><td id="meta-rows">178</td></tr>
+                <tr><td><strong>Columns:</strong></td><td id="meta-cols">14</td></tr>
+                <tr><td><strong>Missing Values:</strong></td><td id="meta-missing">0</td></tr>
+                <tr><td><strong>Duplicate Rows:</strong></td><td id="meta-duplicates">0</td></tr>
+              </table>
+              <div id="dataset-warnings-container" style="margin-top:14px;"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Feature Summary & Metrics</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Feature</th><th>Type</th><th>Missing</th><th>Unique</th><th>Mean</th><th>Std</th><th>Min</th><th>Max</th></tr>
+                </thead>
+                <tbody id="column-stats-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Interactive Data Table Preview</h3>
+              <input type="text" id="preview-search" class="form-control" placeholder="Search records..." style="width:240px;">
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead id="preview-thead"></thead>
+                <tbody id="preview-tbody"></tbody>
+              </table>
+            </div>
+            <div class="pagination-bar">
+              <span id="preview-pagination-info">Showing page 1</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. PREPROCESSING LAB -->
+        <section id="view-preprocessing" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">scikit-learn Preprocessing Lab</h1>
+              <p class="page-desc">Configure feature scalers, variance stabilization, and input dimensions.</p>
+            </div>
+          </div>
+
+          <details class="help-box" open>
+            <summary>Why Scaling is Critical for PCA and t-SNE</summary>
+            <div class="help-box-content">
+              PCA maximizes variance along orthogonal axes. If features have drastically different ranges (e.g. Proline up to 1680 vs. Nonflavanoid phenols at 0.5), 
+              the components will be dominated entirely by the highest-scale feature regardless of information content. 
+              StandardScaler normalizes each variable to mean 0 and unit variance, ensuring equal geometric contribution.
+            </div>
+          </details>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">Pipeline Settings</h3>
+              <div class="form-group">
+                <label class="form-label">Feature Scaler:</label>
+                <select id="select-scaler" class="form-select">
+                  <option value="standard">StandardScaler (Zero mean, unit variance — Recommended)</option>
+                  <option value="robust">RobustScaler (Median and IQR — Outlier Resistant)</option>
+                  <option value="none">None (Raw feature magnitudes)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="checkbox-log-transform">
+                  Enable Log Transformation <code>FunctionTransformer(np.log1p)</code>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Selected Numeric Input Features:</label>
+                <div id="numeric-features-container" style="display:flex; flex-wrap:wrap;"></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Constructed scikit-learn Pipeline Architecture</h3>
+              <pre style="background:#0f172a; color:#f8fafc; padding:16px; border-radius:8px; font-family:var(--font-mono); font-size:12.5px; line-height:1.6;">
+Pipeline([
+  ('preprocessing', ColumnTransformer([
+      ('numeric', Pipeline([
+          ('imputer', SimpleImputer(strategy='median')),
+          ('scaler', StandardScaler())
+      ]), selected_features)
+  ])),
+  ('reduction', PCA(n_components=2, random_state=42))
+])</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. PCA STUDIO -->
+        <section id="view-pca-studio" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">PCA Studio</h1>
+              <p class="page-desc">Principal Component Analysis: Linear projection, variance retention, and feature loadings.</p>
+            </div>
+            <button id="btn-run-pca" class="btn btn-primary">Run PCA</button>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">PCA Controls</h3>
+              <div class="form-group">
+                <label class="form-label">Retained Components:</label>
+                <input type="number" id="pca-retained-components" class="form-control" value="2" min="2" max="13">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Display Mode:</label>
+                <select id="pca-dim-mode" class="form-select">
+                  <option value="2d">2D Projection (PC1 vs PC2)</option>
+                  <option value="3d">3D Projection (PC1 vs PC2 vs PC3)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Color Points By:</label>
+                <select id="pca-color-by" class="form-select"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="pca-kmeans-overlay">
+                  Overlay K-Means Cluster Coloring
+                </label>
+                <input type="number" id="pca-kmeans-k" class="form-control" value="3" min="2" max="10" style="width:100px; display:inline-block; margin-left:10px;">
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">PCA Diagnostic Metrics</h3>
+              <div class="metric-cards-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:0;">
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">PC1 Variance</span>
+                  <span id="stat-pca-pc1-var" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">PC2 Variance</span>
+                  <span id="stat-pca-pc2-var" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">2D Combined Variance</span>
+                  <span id="stat-pca-total-var" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Trustworthiness</span>
+                  <span id="stat-pca-trust" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Reconstruction Error</span>
+                  <span id="stat-pca-recon" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Runtime</span>
+                  <span id="stat-pca-runtime" class="metric-stat-value">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Interactive PCA Projection</h3>
+            <div id="chart-pca-projection" style="height: 480px;"></div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">Scree Plot & Cumulative Variance</h3>
+              <div id="chart-pca-scree" style="height: 380px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Component Loadings (Coefficients)</h3>
+                <select id="pca-loadings-component-select" class="form-select" style="width:120px;">
+                  <option value="PC1">PC1</option>
+                  <option value="PC2">PC2</option>
+                </select>
+              </div>
+              <div id="chart-pca-loadings" style="height: 380px;"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Top Principal Component Loadings Table</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Component</th><th>Feature</th><th>Coefficient (Loading)</th><th>Absolute Weight</th></tr>
+                </thead>
+                <tbody id="pca-loadings-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. t-SNE STUDIO -->
+        <section id="view-tsne-studio" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">t-SNE Studio</h1>
+              <p class="page-desc">t-Distributed Stochastic Neighbor Embedding: Non-linear local manifold visualization.</p>
+            </div>
+            <button id="btn-run-tsne" class="btn btn-primary">Run t-SNE</button>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">t-SNE Hyperparameters</h3>
+              <div class="form-group">
+                <label class="form-label">Perplexity (Effective Neighborhood Size):</label>
+                <input type="number" id="tsne-perplexity" class="form-control" value="30" min="5" max="100">
+                <small style="color:#64748b;">Must be strictly &lt; sample size.</small>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Maximum Iterations:</label>
+                <input type="number" id="tsne-max-iter" class="form-control" value="1000" min="250" max="3000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Learning Rate:</label>
+                <input type="text" id="tsne-learning-rate" class="form-control" value="auto">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Display Mode:</label>
+                <select id="tsne-dim-mode" class="form-select">
+                  <option value="2d">2D Embedding (Dim 1 vs Dim 2)</option>
+                  <option value="3d">3D Embedding</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Color Points By:</label>
+                <select id="tsne-color-by" class="form-select"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="tsne-kmeans-overlay">
+                  Overlay K-Means Cluster Coloring
+                </label>
+                <input type="number" id="tsne-kmeans-k" class="form-control" value="3" min="2" max="10" style="width:100px; display:inline-block; margin-left:10px;">
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">t-SNE Diagnostics & Warnings</h3>
+              <div class="metric-cards-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:16px;">
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Observations Processed</span>
+                  <span id="stat-tsne-samples" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Effective Perplexity</span>
+                  <span id="stat-tsne-perp" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">KL Divergence</span>
+                  <span id="stat-tsne-kl" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Trustworthiness</span>
+                  <span id="stat-tsne-trust" class="metric-stat-value">-</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Execution Time</span>
+                  <span id="stat-tsne-runtime" class="metric-stat-value">-</span>
+                </div>
+              </div>
+              <div id="tsne-warnings-box"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Interactive t-SNE Embedding</h3>
+            <div id="chart-tsne-projection" style="height: 480px;"></div>
+          </div>
+        </section>
+
+        <!-- 6. COMPARE METHODS -->
+        <section id="view-compare-methods" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Side-by-Side Method Comparison</h1>
+              <p class="page-desc">Compare PCA (global linear variance) and t-SNE (local non-linear manifolds) on the exact same sample.</p>
+            </div>
+            <button id="btn-run-comparison" class="btn btn-primary">Compare Methods</button>
+          </div>
+
+          <div class="card">
+            <div class="grid-3">
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">Color Points By:</label>
+                <select id="compare-color-by" class="form-select"></select>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">t-SNE Perplexity:</label>
+                <input type="number" id="compare-perplexity" class="form-control" value="30" min="5" max="100">
+              </div>
+              <div style="display:flex; align-items:flex-end;">
+                <button class="btn btn-secondary" onclick="ComparisonManager.runComparison()">Refresh Comparison</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-cards-grid">
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Common Observation Sample</span>
+              <span id="stat-comp-samples" class="metric-stat-value">-</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Input Features</span>
+              <span id="stat-comp-features" class="metric-stat-value">-</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">PCA 2D Variance</span>
+              <span id="stat-comp-pca-var" class="metric-stat-value">-</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">PCA Runtime</span>
+              <span id="stat-comp-pca-time" class="metric-stat-value">-</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">t-SNE Perplexity</span>
+              <span id="stat-comp-tsne-perp" class="metric-stat-value">-</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">t-SNE Runtime</span>
+              <span id="stat-comp-tsne-time" class="metric-stat-value">-</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">Principal Component Analysis (PCA)</h3>
+              <div id="chart-compare-pca" style="height: 420px;"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">t-SNE Embedding</h3>
+              <div id="chart-compare-tsne" style="height: 420px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. POINT INSPECTOR -->
+        <section id="view-point-inspector" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Observation Point Inspector</h1>
+              <p class="page-desc">Click any data point in PCA or t-SNE scatter plots to audit original feature measurements.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 id="inspector-row-id" style="color:var(--primary); margin-bottom:12px;">Select a point on any scatter plot</h2>
+            <div class="grid-2" style="margin-bottom:16px;">
+              <div class="card" style="margin-bottom:0;">
+                <h4>PCA Coordinates (Transformed Space):</h4>
+                <div id="inspector-pca-coords" style="margin-top:6px;">-</div>
+              </div>
+              <div class="card" style="margin-bottom:0;">
+                <h4>t-SNE Coordinates (Manifold Space):</h4>
+                <div id="inspector-tsne-coords" style="margin-top:6px;">-</div>
+              </div>
+            </div>
+
+            <h3 class="card-title" style="margin-bottom:10px;">Original Feature Measurements:</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead><tr><th>Feature</th><th>Original Value</th></tr></thead>
+                <tbody id="inspector-features-tbody">
+                  <tr><td colspan="2" class="text-center text-muted p-4">Click a point in any scatter plot to view values</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. EXPERIMENTS -->
+        <section id="view-experiments" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Experiment Run History</h1>
+              <p class="page-desc">Audit past PCA and t-SNE execution runs, parameters, and metric outcomes.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr><th>Run ID</th><th>Timestamp</th><th>Method</th><th>Dataset</th><th>Observations</th><th>Primary Metric</th><th>Runtime</th></tr>
+                </thead>
+                <tbody id="experiments-table-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. REPORTS & EXPORT -->
+        <section id="view-reports" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Reports & Data Exports</h1>
+              <p class="page-desc">Export row-aligned embedding coordinates, component loadings, and executive HTML reports.</p>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <h3 class="card-title">PCA Coordinates CSV</h3>
+              <p style="color:#64748b; font-size:13px; margin:8px 0 16px;">Download PC1 and PC2 projection values aligned with row references.</p>
+              <button id="btn-export-pca-csv" class="btn btn-primary" style="width:100%;">Download PCA CSV</button>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">t-SNE Coordinates CSV</h3>
+              <p style="color:#64748b; font-size:13px; margin:8px 0 16px;">Download t-SNE Dimension 1 and 2 embeddings aligned with row references.</p>
+              <button id="btn-export-tsne-csv" class="btn btn-secondary" style="width:100%;">Download t-SNE CSV</button>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Aligned Combined CSV</h3>
+              <p style="color:#64748b; font-size:13px; margin:8px 0 16px;">Consolidated CSV containing row ID, PCA PC1/PC2, and t-SNE coordinates.</p>
+              <button id="btn-export-combined-csv" class="btn btn-secondary" style="width:100%;">Download Combined CSV</button>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">PCA Loadings CSV</h3>
+              <p style="color:#64748b; font-size:13px; margin:8px 0 16px;">Export principal component eigenvectors and feature coefficients.</p>
+              <button id="btn-export-loadings-csv" class="btn btn-secondary" style="width:100%;">Download Loadings CSV</button>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Executive HTML Report</h3>
+              <p style="color:#64748b; font-size:13px; margin:8px 0 16px;">Standalone shareable analysis report with attribution and diagnostics.</p>
+              <button id="btn-export-html-report" class="btn btn-primary" style="width:100%;">Generate HTML Report</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. LEARN & SETTINGS -->
+        <section id="view-learn-settings" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Learn & Technical Documentation</h1>
+              <p class="page-desc">Algorithmic concepts, interpretation warnings, and system settings.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Methodological Foundations</h3>
+            <div style="font-size:13.5px; line-height:1.7; color:#334155;">
+              <p><strong>Principal Component Analysis (PCA):</strong> A linear, unsupervised transformation that projects high-dimensional data onto orthogonal axes that maximize variance. PCA is deterministic, global, and inductive (allows transforming new points).</p>
+              <p><strong>t-SNE:</strong> A non-linear, probabilistic technique that minimizes the Kullback–Leibler divergence between pairwise similarities in high-dimensional space and Student-t distributed similarities in low-dimensional space. Preserves local neighborhoods but does not preserve global distances.</p>
+              <p><strong>Common Interpretation Pitfall:</strong> Do not judge cluster size or distance between clusters in t-SNE as physical geometric truth; density changes and perplexity settings alter apparent visual separation.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Dataset Attribution & Citations</h3>
+            <p style="color:#334155; line-height:1.6;">
+              <strong>Wine Dataset:</strong> Aeberhard, S. & Forina, M. (1991). Wine Recognition Dataset. UCI Machine Learning Repository. <a href="https://doi.org/10.24432/C5PC7J" target="_blank" style="color:#4f46e5;">https://doi.org/10.24432/C5PC7J</a>. CC BY 4.0.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div id="loading-text">Fitting Machine Learning Model...</div>
+  </div>
+
+  <!-- Client scripts -->
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dataset.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/preprocessing.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pca.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/tsne.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/comparison.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

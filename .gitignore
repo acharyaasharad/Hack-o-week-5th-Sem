@@ -1,0 +1,44 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database and cache
+instance/
+*.sqlite3
+*.db
+.cache/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+.Trash/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large downloaded raw datasets (can be generated/downloaded via scripts)
+data/raw/*.csv
+!data/raw/.gitkeep

@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.env
+.venv/
+env/
+venv/
+instance/*
+!instance/.gitkeep
+models/*.joblib
+reports/*.html
+reports/*.csv
+data/processed/*.csv
+uploads/
+.DS_Store

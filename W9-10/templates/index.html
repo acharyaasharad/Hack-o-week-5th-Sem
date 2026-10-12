@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ app_name }} — Customer Segmentation & Machine Learning Intelligence</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Plotly.js for interactive data visualizations -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="Dashboard Logo">
+        <div>
+          <div class="brand-title">Customer Segmentation</div>
+          <div class="brand-subtitle">Intelligence Lab</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-view="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Overview
+        </a>
+        <a class="nav-item" data-view="data-explorer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path></svg>
+          Data Explorer
+        </a>
+        <a class="nav-item" data-view="preprocessing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          Preprocessing Lab
+        </a>
+        <a class="nav-item" data-view="clustering-lab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Clustering Lab
+        </a>
+        <a class="nav-item" data-view="model-comparison">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Model Comparison
+        </a>
+        <a class="nav-item" data-view="cluster-explorer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Cluster Explorer
+        </a>
+        <a class="nav-item" data-view="customer-explorer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Customer Explorer
+        </a>
+        <a class="nav-item" data-view="experiments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          Experiments
+        </a>
+        <a class="nav-item" data-view="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Reports & Export
+        </a>
+        <a class="nav-item" data-view="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Settings & Help
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>Framework: <strong>scikit-learn 1.8</strong></div>
+        <div>Version {{ version }}</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dataset-pill">
+            <span class="status-dot"></span>
+            <span id="topbar-dataset-name">Wholesale Customers (UCI ID 292)</span>
+            <span id="topbar-row-count" style="color:#64748b;">(440 rows)</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button id="btn-reset-workspace" class="btn btn-secondary btn-sm">Reset Workspace</button>
+          <button id="btn-quick-run" class="btn btn-primary btn-sm" onclick="ClusteringManager.runClustering()">Run Clustering</button>
+        </div>
+      </header>
+
+      <!-- Viewport -->
+      <div class="content-viewport">
+        <!-- Toast Notification Container -->
+        <div id="toast-container" style="position:fixed; top:70px; right:30px; z-index:999;"></div>
+
+        <!-- 1. OVERVIEW VIEW -->
+        <section id="view-overview" class="view-section active">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Executive Segmentation Overview</h1>
+              <p class="page-desc">Unsupervised clustering and purchasing intelligence based on official UCI Wholesale Customers data.</p>
+            </div>
+          </div>
+
+          <!-- Metric Cards -->
+          <div class="metric-cards-grid">
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Total Customers</span>
+              <span id="stat-total-records" class="metric-stat-value">440</span>
+              <span class="metric-stat-meta">Validated Observations</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Active Algorithm</span>
+              <span id="stat-active-algo" class="metric-stat-value">K-Means</span>
+              <span class="metric-stat-meta">scikit-learn Pipeline</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Discovered Clusters</span>
+              <span id="stat-cluster-count" class="metric-stat-value">4</span>
+              <span class="metric-stat-meta">Non-noise Segments</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Noise / Outliers</span>
+              <span id="stat-noise-pct" class="metric-stat-value">0%</span>
+              <span class="metric-stat-meta">Density-based Filtering</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Clustering Features</span>
+              <span id="stat-total-features" class="metric-stat-value">6</span>
+              <span class="metric-stat-meta">Spending Categories</span>
+            </div>
+            <div class="metric-stat-card">
+              <span class="metric-stat-label">Pipeline Runtime</span>
+              <span id="stat-exec-time" class="metric-stat-value">0.05s</span>
+              <span class="metric-stat-meta">StandardScaler + Model</span>
+            </div>
+          </div>
+
+          <!-- Primary Visualizations -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Cluster Size Distribution</h3>
+              </div>
+              <div id="chart-cluster-sizes" style="height: 350px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">PCA 2D Cluster Space Projection</h3>
+              </div>
+              <div id="chart-pca-scatter" style="height: 350px;"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Relative Category Spending Profiles</h3>
+            </div>
+            <div id="chart-radar-profiles" style="height: 420px;"></div>
+          </div>
+        </section>
+
+        <!-- 2. DATA EXPLORER VIEW -->
+        <section id="view-data-explorer" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dataset Ingestion & Exploration</h1>
+              <p class="page-desc">Load built-in UCI wholesale data or drag-and-drop your custom CSV files.</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button id="btn-load-uci" class="btn btn-secondary">Load Official UCI Dataset</button>
+              <button id="btn-load-sample" class="btn btn-secondary">Load Synthetic Fallback</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Upload Card -->
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Upload Custom CSV</h3>
+              <div id="csv-dropzone" class="dropzone">
+                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p><strong>Click to browse</strong> or drag & drop a CSV file here</p>
+                <p style="font-size:12px; color:#64748b; margin-top:4px;">Up to 20 MB limit &bull; Clean headers required</p>
+                <input type="file" id="csv-file-input" accept=".csv" style="display:none;">
+              </div>
+            </div>
+
+            <!-- Metadata Summary -->
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Active Dataset Metadata</h3>
+              <table style="font-size:13px;">
+                <tr><td><strong>Name:</strong></td><td id="meta-dataset-name">Wholesale Customers</td></tr>
+                <tr><td><strong>Source:</strong></td><td id="meta-dataset-source">UCI ML Repository (ID 292)</td></tr>
+                <tr><td><strong>Total Records:</strong></td><td id="meta-rows">440</td></tr>
+                <tr><td><strong>Total Columns:</strong></td><td id="meta-cols">8</td></tr>
+                <tr><td><strong>Missing Values:</strong></td><td id="meta-missing">0</td></tr>
+                <tr><td><strong>Duplicate Rows:</strong></td><td id="meta-duplicates">0</td></tr>
+              </table>
+              <div id="dataset-warnings-container" style="margin-top:14px;"></div>
+            </div>
+          </div>
+
+          <!-- Correlation Heatmap -->
+          <div class="card">
+            <h3 class="card-title">Pairwise Spending Feature Correlations</h3>
+            <div id="chart-correlation-heatmap" style="height: 380px;"></div>
+          </div>
+
+          <!-- Column Stats -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Summary Statistics & Data Profiles</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Missing</th>
+                    <th>Unique</th>
+                    <th>Mean</th>
+                    <th>Median</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                  </tr>
+                </thead>
+                <tbody id="column-stats-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Preview Table -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Interactive Data Preview</h3>
+              <input type="text" id="preview-search" class="form-control" placeholder="Search records..." style="width:240px;">
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead id="preview-thead"></thead>
+                <tbody id="preview-tbody"></tbody>
+              </table>
+            </div>
+            <div class="pagination-bar">
+              <span id="preview-pagination-info">Showing page 1 of 37</span>
+              <div>
+                <button class="btn btn-secondary btn-sm" onclick="DatasetManager.fetchPreview(1)">First</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. PREPROCESSING LAB -->
+        <section id="view-preprocessing" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">scikit-learn Preprocessing Lab</h1>
+              <p class="page-desc">Configure ColumnTransformers, imputation strategies, and mathematical feature scalers.</p>
+            </div>
+          </div>
+
+          <details class="help-box" open>
+            <summary>Why is Preprocessing Crucial for Distance-Based Clustering?</summary>
+            <div class="help-box-content">
+              Clustering algorithms like K-Means and DBSCAN compute Euclidean distance in $n$-dimensional space ($d = \sqrt{\sum (x_i - y_i)^2}$). 
+              If features are not scaled, a category with high variance (e.g. Fresh spending up to $112,000) will dwarf features with smaller amounts (e.g. Delicassen up to $47,000). 
+              StandardScaler normalizes each dimension to mean $\mu=0$ and variance $\sigma^2=1$, giving equal geometric weight to each purchasing behavior.
+            </div>
+          </details>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:16px;">Pipeline Configuration</h3>
+              <div class="form-group">
+                <label class="form-label">Numeric Feature Scaling Method:</label>
+                <select id="select-scaling-method" class="form-select">
+                  <option value="standard">StandardScaler (Zero mean, unit variance — Recommended)</option>
+                  <option value="robust">RobustScaler (Median and IQR — Outlier Resistant)</option>
+                  <option value="none">None (Raw monetary features)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Missing Value Numeric Imputer:</label>
+                <select id="select-impute-strategy" class="form-select">
+                  <option value="median">SimpleImputer(strategy='median') — Robust</option>
+                  <option value="mean">SimpleImputer(strategy='mean')</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-checkbox-label">
+                  <input type="checkbox" id="checkbox-log-transform">
+                  Enable Log Transformation <code>FunctionTransformer(np.log1p)</code>
+                </label>
+                <p style="font-size:12px; color:#64748b; margin-top:4px;">Applies $\log(1 + x)$ to compress severe right-skewed spending distributions.</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Numeric Clustering Features:</label>
+                <div id="numeric-features-checkboxes" style="display:flex; flex-wrap:wrap;"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Optional Categorical Features (OneHotEncoder):</label>
+                <div id="categorical-features-checkboxes" style="display:flex; flex-wrap:wrap;"></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">scikit-learn Pipeline Architecture</h3>
+              <p style="color:#64748b; font-size:13px; margin-bottom:14px;">The actual constructed Pipeline executed on the backend:</p>
+              <pre style="background:#0f172a; color:#f8fafc; padding:16px; border-radius:8px; font-family:var(--font-mono); font-size:12.5px; line-height:1.6;">
+Pipeline([
+  ('preprocessing', ColumnTransformer([
+      ('numeric', Pipeline([
+          ('imputer', SimpleImputer(strategy='median')),
+          ('log1p', FunctionTransformer(np.log1p)),  # optional
+          ('scaler', StandardScaler())
+      ]), numeric_features),
+      ('categorical', Pipeline([
+          ('imputer', SimpleImputer(strategy='most_frequent')),
+          ('encoder', OneHotEncoder(handle_unknown='ignore'))
+      ]), categorical_features)
+  ])),
+  ('clustering', KMeans(n_clusters=4, random_state=42))
+])</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. CLUSTERING LAB -->
+        <section id="view-clustering-lab" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Clustering Lab & Hyperparameter Controls</h1>
+              <p class="page-desc">Execute K-Means, Hierarchical (Agglomerative), and DBSCAN clustering models.</p>
+            </div>
+            <button id="btn-run-clustering" class="btn btn-primary">Fit Clustering Pipeline</button>
+          </div>
+
+          <div class="grid-2">
+            <!-- Controls Card -->
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">Algorithm Parameters</h3>
+              <div class="form-group">
+                <label class="form-label">Select Algorithm:</label>
+                <select id="select-algorithm" class="form-select">
+                  <option value="kmeans">K-Means (Centroid Partitioning)</option>
+                  <option value="hierarchical">Hierarchical (Agglomerative) Clustering</option>
+                  <option value="dbscan">DBSCAN (Density-Based Outlier Detection)</option>
+                </select>
+              </div>
+
+              <!-- K-Means Parameters -->
+              <div id="params-kmeans">
+                <div class="form-group">
+                  <label class="form-label">Number of Clusters (k):</label>
+                  <input type="number" id="kmeans-k" class="form-control" value="4" min="2" max="15">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">n_init (Random Centroid Runs):</label>
+                  <input type="number" id="kmeans-n-init" class="form-control" value="10" min="1" max="50">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Iterations:</label>
+                  <input type="number" id="kmeans-max-iter" class="form-control" value="300" min="50" max="1000">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Random State (Seed):</label>
+                  <input type="number" id="kmeans-seed" class="form-control" value="42">
+                </div>
+              </div>
+
+              <!-- Hierarchical Parameters -->
+              <div id="params-hierarchical" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label">Number of Clusters:</label>
+                  <input type="number" id="hierarchical-k" class="form-control" value="4" min="2" max="15">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Linkage Criterion:</label>
+                  <select id="hierarchical-linkage" class="form-select">
+                    <option value="ward">Ward (Minimizes variance within clusters)</option>
+                    <option value="complete">Complete (Maximum pairwise distance)</option>
+                    <option value="average">Average (Average pairwise distance)</option>
+                    <option value="single">Single (Minimum pairwise distance)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- DBSCAN Parameters -->
+              <div id="params-dbscan" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label">Epsilon (eps — Neighborhood Radius):</label>
+                  <input type="number" id="dbscan-eps" class="form-control" value="0.7" step="0.1" min="0.1" max="5.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Min Samples (Core Density Threshold):</label>
+                  <input type="number" id="dbscan-min-samples" class="form-control" value="5" min="2" max="20">
+                </div>
+              </div>
+            </div>
+
+            <!-- Validation Metrics Output Card -->
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:14px;">Clustering Validation Metrics</h3>
+              <div class="metric-cards-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom:16px;">
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Silhouette</span>
+                  <span id="val-silhouette" class="metric-stat-value">0.38</span>
+                  <span class="metric-stat-meta">Higher is better (-1..1)</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Davies–Bouldin</span>
+                  <span id="val-davies-bouldin" class="metric-stat-value">1.12</span>
+                  <span class="metric-stat-meta">Lower is better (&ge; 0)</span>
+                </div>
+                <div class="metric-stat-card">
+                  <span class="metric-stat-label">Calinski–Harabasz</span>
+                  <span id="val-calinski" class="metric-stat-value">138.4</span>
+                  <span class="metric-stat-meta">Higher is better</span>
+                </div>
+              </div>
+              <div id="clustering-warnings-box"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. MODEL COMPARISON VIEW -->
+        <section id="view-model-comparison" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Model Comparison & Hyperparameter Benchmark</h1>
+              <p class="page-desc">Compare performance across K-Means, Hierarchical Clustering, and DBSCAN.</p>
+            </div>
+            <button id="btn-compare-models" class="btn btn-primary">Run Benchmark Comparison</button>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:14px;">Algorithm Performance Benchmark Table</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Algorithm</th>
+                    <th>Configuration</th>
+                    <th>Clusters</th>
+                    <th>Noise %</th>
+                    <th>Silhouette</th>
+                    <th>Davies–Bouldin</th>
+                    <th>Calinski–Harabasz</th>
+                    <th>Execution Time</th>
+                  </tr>
+                </thead>
+                <tbody id="comparison-table-tbody">
+                  <tr><td colspan="8" class="text-center text-muted p-4">Click "Run Benchmark Comparison" to execute parameter sweep</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">K-Means Elbow Curve Analysis</h3>
+                <button id="btn-compute-elbow" class="btn btn-secondary btn-sm">Compute Elbow</button>
+              </div>
+              <div id="chart-elbow-curve" style="height: 360px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Hierarchical Dendrogram (SciPy)</h3>
+                <button id="btn-compute-dendrogram" class="btn btn-secondary btn-sm">Calculate Dendrogram</button>
+              </div>
+              <div id="chart-dendrogram" style="height: 360px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. CLUSTER EXPLORER VIEW -->
+        <section id="view-cluster-explorer" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Cluster Profile & Behavioral Explorer</h1>
+              <p class="page-desc">Examine spending profiles, statistical characteristics, and recommended strategic actions.</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <label class="form-label" style="margin:0;">Select Segment:</label>
+              <select id="cluster-explorer-select" class="form-select" style="width:200px;"></select>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 id="cluster-detail-name" style="color:#0284c7; margin-bottom:4px;">Cluster 0</h2>
+            <div id="cluster-detail-count" style="font-weight:600; color:#475569; margin-bottom:10px;">120 customers (27.3%)</div>
+            <p id="cluster-detail-desc" style="font-size:14px; line-height:1.6; margin-bottom:14px;"></p>
+            
+            <h4 style="margin-top:14px; margin-bottom:6px;">Strategic Action Recommendations:</h4>
+            <ul id="cluster-detail-actions" style="padding-left:20px; line-height:1.6; color:#334155;"></ul>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Category Spending Summary (Original Units)</h3>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Mean Spend</th>
+                      <th>Median Spend</th>
+                      <th>Relative Ratio</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cluster-spend-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:12px;">Assigned Customer Observations</h3>
+              <div class="table-wrapper">
+                <table>
+                  <thead id="cluster-customers-thead"></thead>
+                  <tbody id="cluster-customers-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. CUSTOMER EXPLORER VIEW -->
+        <section id="view-customer-explorer" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Customer Lookup & Out-of-Sample Assignment</h1>
+              <p class="page-desc">Simulate a new customer's spending profile and assign them to a cluster using the fitted K-Means pipeline.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:14px;">Predict New Customer Segment</h3>
+            <form id="customer-lookup-form" class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Fresh Spending ($):</label>
+                <input type="number" id="lookup-fresh" class="form-control" value="12000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Milk Spending ($):</label>
+                <input type="number" id="lookup-milk" class="form-control" value="6000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Grocery Spending ($):</label>
+                <input type="number" id="lookup-grocery" class="form-control" value="8000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Frozen Spending ($):</label>
+                <input type="number" id="lookup-frozen" class="form-control" value="2500">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Detergents & Paper ($):</label>
+                <input type="number" id="lookup-detergents" class="form-control" value="3000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Delicassen Spending ($):</label>
+                <input type="number" id="lookup-delicassen" class="form-control" value="1500">
+              </div>
+              <div style="grid-column: span 3;">
+                <button type="submit" class="btn btn-primary">Assign to Cluster</button>
+              </div>
+            </form>
+            <div id="customer-lookup-result" style="margin-top:16px;"></div>
+          </div>
+        </section>
+
+        <!-- 8. EXPERIMENTS VIEW -->
+        <section id="view-experiments" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Experiment Run History</h1>
+              <p class="page-desc">Track and audit past clustering runs and evaluation metrics.</p>
+            </div>
+            <button id="btn-save-experiment" class="btn btn-secondary">Save Current Run</button>
+          </div>
+
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Run ID</th>
+                    <th>Timestamp</th>
+                    <th>Algorithm</th>
+                    <th>Clusters</th>
+                    <th>Noise %</th>
+                    <th>Silhouette</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="experiments-table-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. REPORTS & EXPORTS VIEW -->
+        <section id="view-reports" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Executive Reports & Data Export</h1>
+              <p class="page-desc">Download labeled datasets, statistical cluster profiles, and executive HTML reports.</p>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <h3 class="card-title">Labeled Customer Data</h3>
+              <p style="color:#64748b; font-size:13px; margin:10px 0 16px;">Download the full dataset with customer row assignments and cluster labels.</p>
+              <button id="btn-export-labeled-csv" class="btn btn-primary" style="width:100%;">Download Clusters CSV</button>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Cluster Spending Profiles</h3>
+              <p style="color:#64748b; font-size:13px; margin:10px 0 16px;">Export mean, median, and total category spending across all discovered segments.</p>
+              <button id="btn-export-profiles-csv" class="btn btn-secondary" style="width:100%;">Download Profiles CSV</button>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Executive HTML Report</h3>
+              <p style="color:#64748b; font-size:13px; margin:10px 0 16px;">Standalone, shareable executive report complete with validation metrics and recommendations.</p>
+              <button id="btn-export-html-report" class="btn btn-primary" style="width:100%;">Download HTML Report</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. SETTINGS & HELP VIEW -->
+        <section id="view-settings" class="view-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Settings & Technical Documentation</h1>
+              <p class="page-desc">Dataset attribution, algorithm principles, and clustering metric explanations.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Dataset Attribution & Citation</h3>
+            <p style="color:#334155; line-height:1.6;">
+              <strong>Wholesale Customers Dataset:</strong> Cardoso, M. (2013). Wholesale customers. UCI Machine Learning Repository. 
+              <a href="https://doi.org/10.24432/C5030X" target="_blank" style="color:#0284c7;">https://doi.org/10.24432/C5030X</a>. Licensed under CC BY 4.0.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom:12px;">Methodological Guide: Unsupervised Clustering</h3>
+            <div style="font-size:13.5px; line-height:1.7; color:#334155;">
+              <p><strong>K-Means:</strong> Partitions data into $k$ spherical clusters by minimizing inertia (sum of squared Euclidean distances to centroids). Fast and inductive ($O(n \cdot k \cdot i)$).</p>
+              <p><strong>Hierarchical (Agglomerative):</strong> Bottom-up tree grouping using linkage criteria (e.g. Ward minimizes variance). Generates dendrograms but is non-inductive and quadratic in memory ($O(n^2)$).</p>
+              <p><strong>DBSCAN:</strong> Density-based spatial clustering that separates core points from noise (outliers with label -1). Does not require pre-specifying $k$ and finds arbitrary cluster shapes.</p>
+              <p><strong>Silhouette Score:</strong> Measures how similar an observation is to its own cluster compared to neighboring clusters ($-1$ to $1$).</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Global Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div id="loading-text">Fitting Machine Learning Model...</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dataset.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/clustering.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

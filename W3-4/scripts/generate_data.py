@@ -1,0 +1,152 @@
+"""
+Generates rich, realistic sample datasets for MovieScope:
+- data/movies.csv
+- data/ratings.csv
+"""
+import csv
+from pathlib import Path
+import random
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+MOVIES = [
+    (1, "Toy Story (1995)", "Adventure|Animation|Children|Comedy|Fantasy"),
+    (2, "Jumanji (1995)", "Adventure|Children|Fantasy"),
+    (3, "Heat (1995)", "Action|Crime|Thriller"),
+    (4, "The Matrix (1999)", "Action|Sci-Fi|Thriller"),
+    (5, "Finding Nemo (2003)", "Adventure|Animation|Children|Comedy"),
+    (6, "The Dark Knight (2008)", "Action|Crime|Drama"),
+    (7, "Interstellar (2014)", "Adventure|Drama|Sci-Fi"),
+    (8, "Inception (2010)", "Action|Adventure|Sci-Fi|Thriller"),
+    (9, "Titanic (1997)", "Drama|Romance"),
+    (10, "The Shawshank Redemption (1994)", "Crime|Drama"),
+    (11, "Pulp Fiction (1994)", "Crime|Drama|Thriller"),
+    (12, "Forrest Gump (1994)", "Comedy|Drama|Romance"),
+    (13, "The Godfather (1972)", "Crime|Drama"),
+    (14, "The Godfather Part II (1974)", "Crime|Drama"),
+    (15, "Star Wars: Episode IV - A New Hope (1977)", "Action|Adventure|Fantasy|Sci-Fi"),
+    (16, "Star Wars: Episode V - The Empire Strikes Back (1980)", "Action|Adventure|Fantasy|Sci-Fi"),
+    (17, "The Lord of the Rings: The Fellowship of the Ring (2001)", "Action|Adventure|Fantasy"),
+    (18, "The Lord of the Rings: The Return of the King (2003)", "Action|Adventure|Drama|Fantasy"),
+    (19, "Fight Club (1999)", "Action|Crime|Drama|Thriller"),
+    (20, "Goodfellas (1990)", "Crime|Drama"),
+    (21, "The Silence of the Lambs (1991)", "Crime|Drama|Horror|Thriller"),
+    (22, "Schindler's List (1993)", "Drama|History|War"),
+    (23, "Spirited Away (2001)", "Adventure|Animation|Children|Fantasy"),
+    (24, "Parasite (2019)", "Comedy|Drama|Thriller"),
+    (25, "Gladiator (2000)", "Action|Adventure|Drama"),
+    (26, "The Lion King (1994)", "Adventure|Animation|Children|Drama"),
+    (27, "Back to the Future (1985)", "Adventure|Comedy|Sci-Fi"),
+    (28, "Alien (1979)", "Horror|Sci-Fi|Thriller"),
+    (29, "Psycho (1960)", "Horror|Mystery|Thriller"),
+    (30, "Apocalypse Now (1979)", "Drama|War"),
+    (31, "Avengers: Infinity War (2018)", "Action|Adventure|Sci-Fi"),
+    (32, "Spider-Man: Into the Spider-Verse (2018)", "Action|Adventure|Animation|Comedy|Sci-Fi"),
+    (33, "Coco (2017)", "Adventure|Animation|Children|Comedy|Fantasy"),
+    (34, "Whiplash (2014)", "Drama|Music"),
+    (35, "The Prestige (2006)", "Drama|Mystery|Sci-Fi|Thriller"),
+    (36, "Memento (2000)", "Mystery|Thriller"),
+    (37, "Se7en (1995)", "Crime|Drama|Mystery|Thriller"),
+    (38, "The Departed (2006)", "Action|Crime|Drama|Thriller"),
+    (39, "WALL-E (2008)", "Adventure|Animation|Children|Comedy|Sci-Fi"),
+    (40, "Up (2009)", "Adventure|Animation|Children|Comedy|Drama"),
+    (41, "Jurassic Park (1993)", "Action|Adventure|Sci-Fi|Thriller"),
+    (42, "The Shining (1980)", "Drama|Horror"),
+    (43, "Blade Runner (1982)", "Drama|Sci-Fi|Thriller"),
+    (44, "Blade Runner 2049 (2017)", "Drama|Mystery|Sci-Fi|Thriller"),
+    (45, "Mad Max: Fury Road (2015)", "Action|Adventure|Sci-Fi|Thriller"),
+    (46, "Grand Budapest Hotel, The (2014)", "Adventure|Comedy|Crime|Drama"),
+    (47, "Amelie (2001)", "Comedy|Romance"),
+    (48, "La La Land (2016)", "Comedy|Drama|Music|Romance"),
+    (49, "Get Out (2017)", "Horror|Mystery|Thriller"),
+    (50, "Her (2013)", "Drama|Romance|Sci-Fi"),
+    (51, "Dune (2021)", "Action|Adventure|Drama|Sci-Fi"),
+    (52, "Everything Everywhere All at Once (2022)", "Action|Adventure|Comedy|Sci-Fi"),
+    (53, "Oppenheimer (2023)", "Drama|History"),
+    (54, "Barbie (2023)", "Adventure|Comedy|Fantasy"),
+    (55, "The Room (2003)", "Drama|Romance"),
+    (56, "Sharknado (2013)", "Comedy|Horror|Sci-Fi"),
+    (57, "Cats (2019)", "Comedy|Drama|Musical"),
+    (58, "Morbius (2022)", "Action|Horror|Sci-Fi"),
+    (59, "Enigma (2020)", ""),  # Edge case: No genres
+    (60, "Unreleased Indie Film (2024)", "Drama|Mystery"),  # Edge case: No ratings
+]
+
+# Write movies.csv
+movies_file = DATA_DIR / "movies.csv"
+with open(movies_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["movieId", "title", "genres"])
+    for m in MOVIES:
+        writer.writerow(m)
+
+print(f"Generated {len(MOVIES)} movies in {movies_file}")
+
+# Target distributions per movie type:
+# Top tier movies (Godfather, Shawshank, Inception, Dark Knight): mean ~ 4.6, std ~ 0.5
+# High tier movies (Pulp Fiction, Matrix, Spirited Away, Interstellar): mean ~ 4.3, std ~ 0.6
+# Medium tier movies: mean ~ 3.6, std ~ 0.7
+# Low tier movies (The Room, Sharknado, Cats, Morbius): mean ~ 1.8, std ~ 0.8
+random.seed(42)
+
+USERS_COUNT = 45
+START_TIMESTAMP = 1451606400  # 2016-01-01
+END_TIMESTAMP = 1717113600    # 2024-05-31
+
+ratings = []
+# (userId, movieId) set to avoid duplicates
+seen_pairs = set()
+
+for movie_id, title, genres in MOVIES:
+    if movie_id == 60:
+        # Edge case: zero ratings
+        continue
+    
+    if movie_id in [10, 6, 13, 14, 8, 4, 11, 7, 18]:  # Super popular & high rated
+        target_mean = 4.65
+        review_count = random.randint(35, 42)
+    elif movie_id in [1, 5, 9, 12, 17, 21, 23, 24, 26, 32, 51, 52, 53]:  # Popular & high rated
+        target_mean = 4.35
+        review_count = random.randint(28, 38)
+    elif movie_id in [55, 56, 57, 58]:  # Infamously low rated
+        target_mean = 1.95
+        review_count = random.randint(18, 28)
+    elif movie_id == 59:  # No genre, medium popularity
+        target_mean = 3.5
+        review_count = 12
+    elif movie_id == 48:
+        target_mean = 4.1
+        review_count = random.randint(20, 30)
+    else:  # Good normal distribution
+        target_mean = random.uniform(3.4, 4.2)
+        review_count = random.randint(15, 28)
+
+    # Pick random users
+    user_pool = random.sample(range(1, USERS_COUNT + 1), review_count)
+    for u in user_pool:
+        # Sample rating from normal dist around target_mean
+        r = random.gauss(target_mean, 0.6)
+        # Round to nearest 0.5 increment
+        r = round(r * 2) / 2
+        # Clamp to [0.5, 5.0]
+        r = max(0.5, min(5.0, r))
+        ts = random.randint(START_TIMESTAMP, END_TIMESTAMP)
+        ratings.append((u, movie_id, r, ts))
+        seen_pairs.add((u, movie_id))
+
+# Add 2 duplicate entries with older timestamps to verify cleaning logic
+dup1 = (1, 1, 3.0, 1450000000)
+dup2 = (2, 4, 2.5, 1450000000)
+ratings.append(dup1)
+ratings.append(dup2)
+
+# Write ratings.csv
+ratings_file = DATA_DIR / "ratings.csv"
+with open(ratings_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["userId", "movieId", "rating", "timestamp"])
+    for r in ratings:
+        writer.writerow(r)
+
+print(f"Generated {len(ratings)} ratings across {USERS_COUNT} users in {ratings_file}")

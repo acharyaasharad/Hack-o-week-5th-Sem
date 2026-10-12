@@ -1,0 +1,28 @@
+# Python virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# User uploaded temporary data
+uploads/*
+!uploads/.gitkeep
+
+# Generated chart caches
+static/charts/*
+!static/charts/.gitkeep
+
+# IDE files
+.vscode/
+.idea/
+*.swp

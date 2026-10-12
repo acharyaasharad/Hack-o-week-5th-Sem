@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Experiment Report - {{ exp.dataset_id }}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1e293b; max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    h1 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; }
+    h2 { color: #0369a1; margin-top: 30px; }
+    .badge { background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; font-size: 13px; }
+    th { background: #f8fafc; font-weight: 600; }
+    .card { background: #f8fafc; border-left: 4px solid #0284c7; padding: 15px; border-radius: 4px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Ensemble Learning & Generalization Lab: Experiment Report</h1>
+  <p><strong>Generated At:</strong> {{ exp.timestamp }}</p>
+  
+  <div class="card">
+    <p><strong>Dataset:</strong> {{ exp.dataset_id }} <span class="badge">{{ exp.task | upper }}</span></p>
+    <p><strong>Target Variable:</strong> <code>{{ exp.target }}</code></p>
+    <p><strong>Selected Features:</strong> {{ exp.features | join(', ') }}</p>
+    <p><strong>Validation Winner:</strong> <strong>{{ exp.winner_id }}</strong></p>
+  </div>
+
+  <h2>Model Arena Comparison Leaderboard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Validation Score</th>
+        <th>Training Score</th>
+        <th>Generalization Gap</th>
+        <th>Fit Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in exp.leaderboard %}
+      <tr>
+        <td><strong>{{ m.display_name }}</strong></td>
+        <td>{{ m.metrics.val_score }}</td>
+        <td>{{ m.metrics.train_score }}</td>
+        <td>{{ m.metrics.generalization_gap }}</td>
+        <td>{{ m.fit_time | round(3) }}s</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Scientific & Methodological Summary</h2>
+  <ul>
+    <li>Preprocessing was learned strictly from the training partition to eliminate data leakage.</li>
+    <li>Model selection was guided strictly by validation score; the held-out test set is evaluated independently.</li>
+    <li>Calculated generalization gaps provide diagnostic insight into empirical model variance.</li>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ensemble Learning & Generalization Lab</title>
+  <!-- Plotly CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/static/assets/logo.svg">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="/static/assets/logo.svg" alt="Logo">
+      <div class="sidebar-title">
+        <h2>Ensemble Lab</h2>
+        <p>ML Generalization Studio</p>
+      </div>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item"><a class="nav-link active" data-tab="tab-overview">📊 Overview</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-explorer">📂 Dataset Explorer</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-arena">⚔️ Model Arena</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-ensembles">🌲 Bagging vs Boosting</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-generalization">📈 Bias–Variance Lab</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-regularization">🎯 Regularization Lab</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-prediction">🔮 Prediction Playground</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-reports">📑 Experiments & Reports</a></li>
+      <li class="nav-item"><a class="nav-link" data-tab="tab-learn">💡 Theory & Learn</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      College ML Edition • Python 3.14 & Flask
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span id="topbar-dataset-name" style="font-weight:700; color:var(--text-primary)">No Dataset Loaded</span>
+        <span id="topbar-task-badge" class="badge badge-classification">Classification</span>
+        <span id="topbar-health-status" class="badge badge-status">Checking System...</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-secondary btn-sm" onclick="App.switchTab('tab-explorer')">Change Dataset</button>
+        <button class="btn btn-primary btn-sm" onclick="App.switchTab('tab-arena')">Go to Arena</button>
+      </div>
+    </header>
+
+    <!-- Notification Container -->
+    <div id="notification-container" style="position:fixed; top:65px; right:25px; z-index:9999;"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="spinner"></div>
+      <div id="loading-message" style="font-weight:600; font-size:14px;">Running experiments...</div>
+    </div>
+
+    <!-- Content Area Tabs -->
+    <main class="content-area">
+
+      <!-- 1. OVERVIEW -->
+      <section id="tab-overview" class="tab-pane active">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Ensemble Learning & Generalization Lab</h2>
+              <p class="card-subtitle">Explore Bagging, Boosting, Bias-Variance Tradeoff, L1/L2 Regularization, and Leakage-Free ML Workflows</p>
+            </div>
+          </div>
+          <div class="grid-4">
+            <div class="kpi-card">
+              <span class="kpi-label">Active Dataset</span>
+              <span class="kpi-value" id="ov-dataset-name" style="font-size:18px;">None</span>
+              <span class="kpi-sub">UCI or Custom CSV</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Models Evaluated</span>
+              <span class="kpi-value" id="ov-models-count">0</span>
+              <span class="kpi-sub">Candidate Pipelines</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Data Split Strategy</span>
+              <span class="kpi-value" style="font-size:18px;">70 / 15 / 15</span>
+              <span class="kpi-sub">Train / Val / Final Test</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Leakage Protection</span>
+              <span class="kpi-value" style="font-size:18px; color:#10b981;">Active</span>
+              <span class="kpi-sub">Split-first Preprocessing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">Quick Start Guided Workflow</h3>
+            <ol style="margin-left: 20px; line-height: 2; font-size: 13px; color: var(--text-secondary); margin-top: 10px;">
+              <li>Go to <strong>Dataset Explorer</strong> and select either <em>UCI Bank Marketing</em> (Classification) or <em>UCI Bike Sharing</em> (Regression).</li>
+              <li>Notice the automated <strong>Target Leakage Safeguards</strong> that prevent using future-time features.</li>
+              <li>Navigate to <strong>Model Arena</strong> to train Decision Tree, Bagging, Random Forest, XGBoost, and LightGBM models simultaneously.</li>
+              <li>Visit the <strong>Bias–Variance Lab</strong> to inspect complexity curves and see the synthetic polynomial demonstration.</li>
+              <li>Test parameter penalties in the <strong>Regularization Lab</strong> to witness L1 zero-coefficient sparsity vs L2 weight shrinkage.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Key Methodological Principles</h3>
+            <ul style="margin-left: 20px; line-height: 2; font-size: 13px; color: var(--text-secondary); margin-top: 10px;">
+              <li><strong>Zero Preprocessing Leakage:</strong> Scalers, imputers, and encoders are fitted strictly on training subsets.</li>
+              <li><strong>Held-out Test Integrity:</strong> Model selection & hyperparameter tuning use validation data only. The test set is evaluated once at the conclusion.</li>
+              <li><strong>Real Empirical Results:</strong> No hardcoded scores; all curves and metrics reflect fitted scikit-learn/XGBoost/LightGBM estimators.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DATASET EXPLORER -->
+      <section id="tab-explorer" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Dataset Explorer & Validation</h2>
+            <p class="card-subtitle">Select a benchmark dataset or upload your own CSV file</p>
+          </div>
+          <div class="grid-2">
+            <div>
+              <div class="form-group">
+                <label class="form-label">Built-in Benchmark Datasets</label>
+                <div style="display:flex; gap:10px;">
+                  <select id="select-builtin-dataset" class="form-control select-control"></select>
+                  <button id="btn-load-dataset" class="btn btn-primary">Load</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Upload Custom CSV</label>
+                <input type="file" id="input-csv-upload" class="form-control" accept=".csv">
+              </div>
+            </div>
+          </div>
+
+          <div id="dataset-leakage-warnings" style="display:none; margin-top:10px;"></div>
+
+          <div class="grid-3" style="margin-top:14px;">
+            <div class="kpi-card">
+              <span class="kpi-label">Observations</span>
+              <span class="kpi-value" id="summary-row-count">-</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Columns</span>
+              <span class="kpi-value" id="summary-col-count">-</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Task</span>
+              <span class="kpi-value" id="summary-task">-</span>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:10px;">
+            <div class="form-group">
+              <label class="form-label">Task Type</label>
+              <select id="select-task-type" class="form-control select-control">
+                <option value="classification">Classification</option>
+                <option value="regression">Regression</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prediction Target Column</label>
+              <select id="select-target-column" class="form-control select-control"></select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Feature Predictors (Toggle to exclude/include)</label>
+            <div id="feature-chips-container" class="chip-container"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Data Sample Preview</h3>
+          <div class="table-responsive" style="margin-top:12px;">
+            <table class="data-table">
+              <thead id="preview-table-head"></thead>
+              <tbody id="preview-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MODEL ARENA -->
+      <section id="tab-arena" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Model Arena Leaderboard</h2>
+              <p class="card-subtitle">Train baseline, bagging, random forest, and boosting algorithms on fair splits</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button id="btn-run-arena" class="btn btn-primary">Train & Compare Models</button>
+              <button id="btn-eval-heldout-test" class="btn btn-accent">Evaluate Winner on Test Set</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Select Candidate Models to Train</label>
+            <div id="arena-models-list" class="chip-container"></div>
+          </div>
+
+          <div class="table-responsive" style="margin-top:16px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Model & Family</th>
+                  <th>Validation Score (Selection Metric)</th>
+                  <th>Training Score</th>
+                  <th>Generalization Gap</th>
+                  <th>Held-out Test Score</th>
+                  <th>Fit Duration</th>
+                </tr>
+              </thead>
+              <tbody id="arena-leaderboard-body">
+                <tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:24px;">No models trained yet. Click "Train & Compare Models" above.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Arena Performance Comparison</h3>
+          <div id="chart-arena-leaderboard" class="chart-box"></div>
+        </div>
+      </section>
+
+      <!-- 4. BAGGING VS BOOSTING -->
+      <section id="tab-ensembles" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Bagging vs Boosting Architecture Comparison</h2>
+            <p class="card-subtitle">Parallel independent averaging vs sequential error-focused boosting</p>
+          </div>
+          <div class="grid-2">
+            <div style="background:#f8fafc; padding:16px; border-radius:8px; border-left:4px solid var(--accent-cyan);">
+              <h4 style="color:#0e7490">Bagging (Bootstrap Aggregation)</h4>
+              <p style="font-size:12px; margin-top:6px; color:#334155;">
+                Trains multiple base learners (e.g. Decision Trees) independently in parallel on bootstrap resamples of the dataset.
+                Predictions are combined by majority vote (classification) or averaging (regression).
+              </p>
+              <div style="font-size:11px; margin-top:8px; color:#475569;">
+                <strong>Primary effect:</strong> Drastically reduces variance of unstable high-variance base learners without increasing bias.
+              </div>
+            </div>
+            <div style="background:#f8fafc; padding:16px; border-radius:8px; border-left:4px solid var(--accent-indigo);">
+              <h4 style="color:#4338ca">Boosting (Gradient Boosting / XGBoost / LightGBM)</h4>
+              <p style="font-size:12px; margin-top:6px; color:#334155;">
+                Trains shallow weak learners sequentially. Each subsequent model fits the pseudo-residuals (gradients) of the previous ensemble stage.
+                Shrinkage (learning rate) prevents individual trees from over-correcting.
+              </p>
+              <div style="font-size:11px; margin-top:8px; color:#475569;">
+                <strong>Primary effect:</strong> Reduces both bias and variance; requires careful regularization (e.g. tree depth, subsample, reg_alpha, reg_lambda).
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. BIAS-VARIANCE LAB -->
+      <section id="tab-generalization" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Bias–Variance & Complexity Lab</h2>
+              <p class="card-subtitle">Inspect underfitting, overfitting, and optimal complexity thresholds</p>
+            </div>
+            <button id="btn-run-complexity-sweep" class="btn btn-primary">Run Complexity Sweep</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label class="form-label">Model</label>
+              <select id="select-gen-model" class="form-control select-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Parameter to Sweep</label>
+              <select id="select-gen-param" class="form-control select-control">
+                <option value="max_depth">max_depth (Tree Depth)</option>
+                <option value="min_samples_leaf">min_samples_leaf</option>
+                <option value="n_estimators">n_estimators (Ensemble Trees)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Values (Comma-separated)</label>
+              <input type="text" id="input-gen-param-values" class="form-control" value="1, 2, 3, 5, 8, 12, 18, 25">
+            </div>
+          </div>
+          <div id="gen-diagnostic-box" style="display:none; margin-top:10px;"></div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Complexity vs Performance Curve</h3>
+          <div id="chart-complexity-curve" class="chart-box"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Synthetic Educational Overfitting Demonstration</h3>
+              <p class="card-subtitle">Visualizing true underlying curve vs Degrees 1, 4, and 12</p>
+            </div>
+            <button id="btn-run-synthetic-demo" class="btn btn-secondary">Generate Demo Curve</button>
+          </div>
+          <div id="chart-synthetic-demo" class="chart-box"></div>
+          <div id="synthetic-metrics-summary"></div>
+        </div>
+      </section>
+
+      <!-- 6. REGULARIZATION LAB -->
+      <section id="tab-regularization" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">L1 and L2 Regularization Lab</h2>
+              <p class="card-subtitle">Analyze how penalty terms constrain model complexity, shrink coefficients, and induce sparsity</p>
+            </div>
+            <button id="btn-run-reg-sweep" class="btn btn-primary">Run Regularization Sweep</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label class="form-label">Model</label>
+              <select id="select-reg-model" class="form-control select-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Regularization Parameter</label>
+              <select id="select-reg-param" class="form-control select-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Strength Values (log scale recommended)</label>
+              <input type="text" id="input-reg-param-values" class="form-control" value="0.001, 0.01, 0.1, 1.0, 10.0, 100.0">
+            </div>
+          </div>
+          <div id="reg-explanation-box" style="display:none; margin-top:10px;"></div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Regularization Strength vs Performance & Sparsity</h3>
+          <div id="chart-regularization-sweep" class="chart-box"></div>
+        </div>
+      </section>
+
+      <!-- 7. PREDICTION PLAYGROUND -->
+      <section id="tab-prediction" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Prediction Playground</h2>
+              <p class="card-subtitle">Test live model inference on new sample inputs via the fitted preprocessor pipeline</p>
+            </div>
+            <button id="btn-build-pred-form" class="btn btn-secondary">Build Input Form</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Select Fitted Model</label>
+            <select id="select-pred-model" class="form-control select-control"></select>
+          </div>
+          <div id="pred-form-inputs" class="grid-3" style="margin-top:14px;"></div>
+          <div id="pred-controls-box" style="display:none; margin-top:16px;">
+            <button id="btn-run-prediction" class="btn btn-primary">Compute Prediction</button>
+          </div>
+          <div id="pred-result-display" style="display:none; margin-top:16px;"></div>
+        </div>
+      </section>
+
+      <!-- 8. EXPERIMENTS & REPORTS -->
+      <section id="tab-reports" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Experiments, Export & Reporting</h2>
+              <p class="card-subtitle">Download leaderboard metrics as CSV or compile a standalone executive HTML report</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button id="btn-export-comparison-csv" class="btn btn-secondary">Download CSV</button>
+              <button id="btn-export-html-report" class="btn btn-primary">Generate HTML Report</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:13px; color:var(--text-secondary);">
+              All experimental metrics, hyperparameter grids, validation scores, and final held-out test results are recorded with exact timestamps.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. LEARN & THEORY -->
+      <section id="tab-learn" class="tab-pane">
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:16px;">Core Machine Learning Concepts</h2>
+
+          <div class="accordion">
+            <div class="accordion-header">
+              <span>1. What is the Bias–Variance Tradeoff?</span>
+              <span>▼</span>
+            </div>
+            <div class="accordion-body">
+              <strong>Bias</strong> refers to the error introduced by approximating real-world complex problems with an overly simplified model (e.g. fitting a straight line to quadratic data). High bias causes <em>underfitting</em>.<br><br>
+              <strong>Variance</strong> refers to a model's sensitivity to small fluctuations in the training set (e.g. a deep decision tree that memorizes noise). High variance causes <em>overfitting</em>, characterized by a large gap between training performance and validation performance.
+            </div>
+          </div>
+
+          <div class="accordion">
+            <div class="accordion-header">
+              <span>2. Why does Random Forest beat a Single Decision Tree?</span>
+              <span>▼</span>
+            </div>
+            <div class="accordion-body">
+              An individual decision tree is low bias but high variance (unstable). Random Forest decorrelates trees by selecting a random subset of features at each split and training each tree on a bootstrap sample. When averaging predictions across many decorrelated trees, the variance decreases by a factor proportional to 1/M, where M is the number of trees.
+            </div>
+          </div>
+
+          <div class="accordion">
+            <div class="accordion-header">
+              <span>3. How do XGBoost and LightGBM Regularize Boosting?</span>
+              <span>▼</span>
+            </div>
+            <div class="accordion-body">
+              Traditional gradient boosting relies mainly on learning rate and shallow trees. XGBoost and LightGBM add explicit loss penalty terms: <code>reg_alpha</code> (L1 penalty on leaf weights, enforcing sparsity) and <code>reg_lambda</code> (L2 penalty, smoothing leaf weights). LightGBM additionally uses histogram binning and leaf-wise tree growth with depth limits to maintain speed and control complexity.
+            </div>
+          </div>
+
+          <div class="accordion">
+            <div class="accordion-header">
+              <span>4. Data Leakage Safeguards in Practice</span>
+              <span>▼</span>
+            </div>
+            <div class="accordion-body">
+              Target leakage occurs when a predictor feature incorporates information that is unavailable at prediction time or directly derived from the target.<br>
+              • <em>UCI Bank Marketing:</em> The <code>duration</code> attribute describes the call length, known only <em>after</em> the call concludes. Including it artificially inflates accuracy.<br>
+              • <em>UCI Bike Sharing:</em> <code>casual</code> and <code>registered</code> ride counts sum directly to the target <code>cnt</code>. Including them is circular.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- JavaScript Application Modules -->
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/dataset.js"></script>
+  <script src="/static/js/model_arena.js"></script>
+  <script src="/static/js/generalization.js"></script>
+  <script src="/static/js/regularization.js"></script>
+  <script src="/static/js/prediction.js"></script>
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

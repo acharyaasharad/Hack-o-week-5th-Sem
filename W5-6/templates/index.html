@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Touchline Analytics — Football Analytics & Player Comparison Lab</title>
+  <meta name="description" content="Professional football analytics platform for exploring player performance, tactical metrics, radar comparisons, and statistical visualizations.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js 4.4 CDN for Interactive Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2.2">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ====================================================================
+         LEFT SIDEBAR NAVIGATION
+         ==================================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#overview" class="brand-link" id="brandLink">
+          <div class="brand-icon">
+            <i data-lucide="activity"></i>
+          </div>
+          <div>
+            <span class="brand-title">Touchline</span>
+            <span class="brand-tagline">Football Analytics Lab</span>
+          </div>
+        </a>
+        <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Close sidebar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">DISCOVERY & ANALYSIS</div>
+        <ul class="nav-list">
+          <li>
+            <a href="#overview" class="nav-item active" data-section="section-overview">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Overview</span>
+            </a>
+          </li>
+          <li>
+            <a href="#players" class="nav-item" data-section="section-players">
+              <i data-lucide="users"></i>
+              <span>Player Explorer</span>
+            </a>
+          </li>
+          <li>
+            <a href="#compare" class="nav-item" data-section="section-compare">
+              <i data-lucide="git-compare"></i>
+              <span>Compare Players</span>
+            </a>
+          </li>
+          <li>
+            <a href="#analytics" class="nav-item" data-section="section-analytics">
+              <i data-lucide="bar-chart-2"></i>
+              <span>Performance Lab</span>
+            </a>
+          </li>
+          <li>
+            <a href="#matches" class="nav-item" data-section="section-matches">
+              <i data-lucide="trophy"></i>
+              <span>Match Insights</span>
+            </a>
+          </li>
+        </ul>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="dataset-pill">
+          <span class="status-dot online"></span>
+          <span id="sidebarStatusText">Demo Dataset · Synthetic</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN VIEWPORT WRAPPER
+         ==================================================================== -->
+    <div class="main-wrapper">
+
+      <!-- TOP STICKY BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Open sidebar menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="breadcrumbs">
+            <span id="pageTitle">Overview</span>
+            <span class="subtitle-chip" id="pageSubtitle">Football Intelligence Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Global Player Search -->
+          <div class="global-search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="globalSearchInput" placeholder="Quick find player... (/)" autocomplete="off">
+            <kbd class="search-kbd">/</kbd>
+          </div>
+
+          <!-- Season Selector -->
+          <select id="globalSeasonSelect" class="topbar-select" aria-label="Select season">
+            <option value="">All Seasons</option>
+            <option value="2023-2024" selected>2023-2024</option>
+          </select>
+
+          <!-- League Selector -->
+          <select id="globalLeagueSelect" class="topbar-select" aria-label="Select league">
+            <option value="">All Leagues</option>
+            <option value="Premier League">Premier League</option>
+            <option value="La Liga">La Liga</option>
+          </select>
+
+          <!-- Refresh Data Button -->
+          <button class="icon-action-btn" id="refreshBtn" title="Refresh live statistics" aria-label="Refresh data">
+            <i data-lucide="rotate-cw"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <main class="content-body">
+
+        <!-- ================================================================
+             SECTION 1: OVERVIEW DASHBOARD
+             ================================================================ -->
+        <section class="page-section active" id="section-overview">
+          
+          <!-- Hero Banner -->
+          <div class="dashboard-hero">
+            <div class="hero-chip">
+              <i data-lucide="sparkles"></i>
+              <span>Data-Driven Football Intelligence</span>
+            </div>
+            <h1 class="hero-title">Football, backed by data.</h1>
+            <p class="hero-subtitle">
+              Explore player performance, evaluate tactical metrics, compare head-to-head radars,
+              and uncover analytical trends derived from comprehensive match and player datasets.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="heroExploreBtn">
+                <i data-lucide="users"></i>
+                <span>Explore Players</span>
+              </button>
+              <button class="btn btn-secondary" id="heroCompareBtn">
+                <i data-lucide="git-compare"></i>
+                <span>Compare Players</span>
+              </button>
+              <button class="btn btn-secondary" id="heroAnalyticsBtn">
+                <i data-lucide="bar-chart-2"></i>
+                <span>View Analytics</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 6 Primary KPI Summary Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald">
+                <i data-lucide="users"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Players</span>
+                <span class="kpi-value" id="kpiTotalPlayers">—</span>
+                <span class="kpi-subtext">Active cataloged squad members</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box cyan">
+                <i data-lucide="shield"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Clubs</span>
+                <span class="kpi-value" id="kpiTotalClubs">—</span>
+                <span class="kpi-subtext">Across Premier League & La Liga</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box lime">
+                <i data-lucide="trophy"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Competitions</span>
+                <span class="kpi-value" id="kpiTotalCompetitions">—</span>
+                <span class="kpi-subtext">Tier-one domestic leagues</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box rose">
+                <i data-lucide="target"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Goals</span>
+                <span class="kpi-value" id="kpiTotalGoals">—</span>
+                <span class="kpi-subtext">Scored across all fixtures</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box amber">
+                <i data-lucide="star"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Average Rating</span>
+                <span class="kpi-value" id="kpiAvgRating">—</span>
+                <span class="kpi-subtext">Squad average (0–10 scale)</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald">
+                <i data-lucide="calendar"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Matches</span>
+                <span class="kpi-value" id="kpiTotalMatches">—</span>
+                <span class="kpi-subtext">Analyzed fixture records</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overview Interactive Charts Grid (2x2) -->
+          <div class="charts-grid-2x2">
+            
+            <!-- Chart 1: Goals and Assists by Position -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="bar-chart-3" class="text-emerald"></i>
+                  <h3>Goals & Assists by Position</h3>
+                </div>
+                <span class="badge badge-subtle">Chart.js</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="positionChart"></canvas>
+              </div>
+              <p class="chart-caption">Grouped distribution of total goals scored and assists recorded by tactical position.</p>
+            </div>
+
+            <!-- Chart 2: Rating Distribution -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="activity" class="text-lime"></i>
+                  <h3>Player Rating Distribution</h3>
+                </div>
+                <span class="badge badge-subtle">Histogram</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="ratingDistChart"></canvas>
+              </div>
+              <p class="chart-caption">Frequency distribution of match ratings across the active player dataset.</p>
+            </div>
+
+            <!-- Chart 3: Match Scoring Over Time -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="trending-up" class="text-cyan"></i>
+                  <h3>Goals Across Match Dates</h3>
+                </div>
+                <span class="badge badge-subtle">Monthly Trend</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="matchTrendsChart"></canvas>
+              </div>
+              <p class="chart-caption">Aggregate monthly fixture goal totals throughout the competition season.</p>
+            </div>
+
+            <!-- Chart 4: League Comparison -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="sliders" class="text-amber"></i>
+                  <h3>League Scoring Comparison</h3>
+                </div>
+                <span class="badge badge-subtle">Competition Total</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="leagueCompChart"></canvas>
+              </div>
+              <p class="chart-caption">Comparative goal totals and player tallies between Premier League and La Liga.</p>
+            </div>
+
+          </div>
+
+          <!-- Top Performers Table -->
+          <div class="table-card mt-6">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="flame" class="text-rose"></i>
+                <div>
+                  <h3>Top Performers</h3>
+                  <span class="subtext-muted">Ranked by total goals & rating (min. 450 minutes played)</span>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="viewAllPlayersBtn">
+                <span>View All in Explorer</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Club</th>
+                    <th>League</th>
+                    <th>Pos</th>
+                    <th>Goals</th>
+                    <th>Assists</th>
+                    <th>Goals / 90</th>
+                    <th>Rating</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="topPerformersBody">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================================================================
+             SECTION 2: PLAYER EXPLORER
+             ================================================================ -->
+        <section class="page-section" id="section-players">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Player Explorer</h2>
+              <p class="section-desc">Search, filter, and inspect detailed performance statistics across all squad members.</p>
+            </div>
+            <div class="actions-group">
+              <a href="/api/export/players.csv" class="btn btn-secondary btn-sm" id="exportPlayersBtn">
+                <i data-lucide="download"></i>
+                <span>Export CSV</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Explorer Filter Panel -->
+          <div class="filter-panel">
+            <div class="filter-grid">
+              
+              <!-- Search Name -->
+              <div class="filter-group">
+                <label for="filterSearch">Search Player</label>
+                <div class="input-with-icon">
+                  <i data-lucide="search"></i>
+                  <input type="text" id="filterSearch" placeholder="Name or keyword...">
+                </div>
+              </div>
+
+              <!-- Position -->
+              <div class="filter-group">
+                <label for="filterPosition">Position</label>
+                <select id="filterPosition">
+                  <option value="">All Positions</option>
+                  <option value="Goalkeeper">Goalkeeper</option>
+                  <option value="Defender">Defender</option>
+                  <option value="Midfielder">Midfielder</option>
+                  <option value="Forward">Forward</option>
+                </select>
+              </div>
+
+              <!-- League -->
+              <div class="filter-group">
+                <label for="filterLeague">League</label>
+                <select id="filterLeague">
+                  <option value="">All Leagues</option>
+                  <option value="Premier League">Premier League</option>
+                  <option value="La Liga">La Liga</option>
+                </select>
+              </div>
+
+              <!-- Club -->
+              <div class="filter-group">
+                <label for="filterClub">Club</label>
+                <select id="filterClub">
+                  <option value="">All Clubs</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <!-- Min Minutes -->
+              <div class="filter-group">
+                <label for="filterMinutes">Min Minutes: <span id="minutesVal">0</span></label>
+                <input type="range" id="filterMinutes" min="0" max="3000" step="100" value="0">
+              </div>
+
+              <!-- Min Rating -->
+              <div class="filter-group">
+                <label for="filterRating">Min Rating: <span id="ratingVal">0.0★</span></label>
+                <input type="range" id="filterRating" min="0.0" max="9.0" step="0.5" value="0.0">
+              </div>
+
+              <!-- Sort Field -->
+              <div class="filter-group">
+                <label for="filterSortBy">Sort By</label>
+                <select id="filterSortBy">
+                  <option value="goals" selected>Goals</option>
+                  <option value="assists">Assists</option>
+                  <option value="goals_per_90">Goals / 90</option>
+                  <option value="rating">Rating</option>
+                  <option value="minutes_played">Minutes Played</option>
+                  <option value="appearances">Appearances</option>
+                  <option value="xg">Expected Goals (xG)</option>
+                  <option value="xa">Expected Assists (xA)</option>
+                  <option value="player_name">Player Name</option>
+                </select>
+              </div>
+
+              <!-- Actions -->
+              <div class="filter-group filter-actions-group">
+                <button class="btn btn-secondary btn-sm" id="resetFiltersBtn">
+                  <i data-lucide="rotate-ccw"></i>
+                  <span>Reset</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Filter Meta Information & Results Summary -->
+          <div class="results-header-bar">
+            <div>
+              <span class="results-count" id="resultsCountText">Showing 0 matching players</span>
+            </div>
+            <div class="sort-order-toggle">
+              <button class="toggle-btn active" id="sortDescBtn" title="Descending sort">
+                <i data-lucide="arrow-down-wide-narrow"></i>
+              </button>
+              <button class="toggle-btn" id="sortAscBtn" title="Ascending sort">
+                <i data-lucide="arrow-up-narrow-wide"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Players Table / Cards -->
+          <div class="table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Club</th>
+                    <th>League</th>
+                    <th>Pos</th>
+                    <th>Age</th>
+                    <th>Apps</th>
+                    <th>Mins</th>
+                    <th>Goals</th>
+                    <th>Assists</th>
+                    <th>G/90</th>
+                    <th>xG</th>
+                    <th>Pass %</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="playersTableBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="playersEmptyState" style="display: none;">
+              <i data-lucide="user-x" class="empty-icon"></i>
+              <h4>No Players Found</h4>
+              <p>No players matched your active filters. Try broadening your criteria.</p>
+              <button class="btn btn-primary btn-sm mt-3" id="emptyClearBtn">Clear All Filters</button>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar" id="playersPaginationBar">
+              <button class="btn btn-secondary btn-sm" id="prevPageBtn">
+                <i data-lucide="chevron-left"></i> Previous
+              </button>
+              <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+              <button class="btn btn-secondary btn-sm" id="nextPageBtn">
+                Next <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================================================================
+             SECTION 3: COMPARE PLAYERS
+             ================================================================ -->
+        <section class="page-section" id="section-compare">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Player Comparison Lab</h2>
+              <p class="section-desc">Select 2 to 4 players for head-to-head metric benchmarking, radar profiles, and statistical verdicts.</p>
+            </div>
+          </div>
+
+          <!-- Comparison Selection Controls Card -->
+          <div class="panel-card mb-6">
+            <div class="compare-selector-row">
+              <div class="flex-1">
+                <label for="comparePlayerSelect" class="form-label">Add Player to Comparison (2 to 4)</label>
+                <div class="input-with-icon">
+                  <i data-lucide="user-plus"></i>
+                  <select id="comparePlayerSelect">
+                    <option value="">Select a player to compare...</option>
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-primary" id="addCompareBtn">
+                <i data-lucide="plus"></i>
+                <span>Add Player</span>
+              </button>
+              <button class="btn btn-secondary" id="clearCompareBtn">
+                <i data-lucide="trash-2"></i>
+                <span>Clear All</span>
+              </button>
+            </div>
+
+            <!-- Active Selected Chips -->
+            <div class="compare-chips-container mt-4" id="compareChipsContainer">
+              <!-- Dynamically populated chips -->
+            </div>
+          </div>
+
+          <!-- Comparison Results Area -->
+          <div id="compareResultsArea" style="display: none;">
+
+            <!-- Dual-Column Visual: Radar Chart & Statistical Verdict -->
+            <div class="charts-grid-2x2 mb-6">
+              
+              <!-- Radar Chart Card -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title-group">
+                    <i data-lucide="radar" class="text-emerald"></i>
+                    <h3>Normalized Metric Radar</h3>
+                  </div>
+                  <span class="badge badge-subtle">Min-Max Percentile</span>
+                </div>
+                <div class="chart-container radar-container">
+                  <canvas id="comparisonRadarChart"></canvas>
+                </div>
+                <p class="chart-caption">Metrics scaled 0–100 against population bounds so differing scales (e.g. Pass % vs Goals/90) do not distort the visual.</p>
+              </div>
+
+              <!-- Comparison Verdict & Fact Sheet -->
+              <div class="panel-card flex-col-between">
+                <div>
+                  <div class="panel-header">
+                    <div class="panel-title-group">
+                      <i data-lucide="award" class="text-lime"></i>
+                      <h3>Statistical Comparison Verdict</h3>
+                    </div>
+                    <span class="badge badge-subtle">Deterministic</span>
+                  </div>
+
+                  <div class="verdict-points-list" id="verdictPointsList">
+                    <!-- Populated dynamically -->
+                  </div>
+
+                  <div class="verdict-warnings-box mt-4" id="verdictWarningsBox">
+                    <!-- Contextual warnings -->
+                  </div>
+                </div>
+
+                <div class="verdict-footer mt-4">
+                  <p class="disclaimer-text">
+                    Note: Radars and per-90 metrics reflect historical output within the active dataset; tactical roles and team quality influence raw values.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Grouped Bar Chart: Goals & Assists Head-to-Head -->
+            <div class="panel-card mb-6">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="bar-chart" class="text-cyan"></i>
+                  <h3>Head-to-Head Output Comparison</h3>
+                </div>
+                <span class="badge badge-subtle">Raw Totals</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="comparisonBarChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Side-by-Side Metric Table with Leaders Highlighted -->
+            <div class="table-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="table" class="text-emerald"></i>
+                  <h3>Comprehensive Metric Benchmarks</h3>
+                </div>
+                <span class="badge badge-subtle">Category Breakdown</span>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="comparisonTable">
+                  <thead>
+                    <tr id="comparisonTableHeaderRow">
+                      <th>Metric</th>
+                      <!-- Player columns populated dynamically -->
+                    </tr>
+                  </thead>
+                  <tbody id="comparisonTableBody">
+                    <!-- Metrics populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Empty State When < 2 Players -->
+          <div class="empty-state" id="compareEmptyState">
+            <i data-lucide="users-round" class="empty-icon"></i>
+            <h4>Select At Least 2 Players</h4>
+            <p>Pick between 2 and 4 players from the selector above (or click "Compare" from any player card) to generate a detailed head-to-head analysis.</p>
+          </div>
+
+        </section>
+
+        <!-- ================================================================
+             SECTION 4: PERFORMANCE ANALYTICS
+             ================================================================ -->
+        <section class="page-section" id="section-analytics">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Performance Analytics Lab</h2>
+              <p class="section-desc">In-depth positional modeling, age curves, tactical correlations, and club output statistics.</p>
+            </div>
+          </div>
+
+          <!-- Subsection Tabs -->
+          <div class="subnav-tabs mb-6">
+            <button class="tab-btn active" data-tab="tab-positions">Positional Analysis</button>
+            <button class="tab-btn" data-tab="tab-age">Age & Efficiency</button>
+            <button class="tab-btn" data-tab="tab-clubs">Club Aggregates</button>
+            <button class="tab-btn" data-tab="tab-correlation">Correlation Matrix</button>
+          </div>
+
+          <!-- TAB 1: POSITIONS -->
+          <div class="tab-pane active" id="tab-positions">
+            <div class="panel-card mb-6">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="shield" class="text-emerald"></i>
+                  <h3>Position Comparison Report</h3>
+                </div>
+                <a href="/api/charts/positions" target="_blank" class="btn btn-secondary btn-sm">
+                  <i data-lucide="download"></i> Download PNG
+                </a>
+              </div>
+              <div class="chart-frame">
+                <img src="/api/charts/positions" alt="Position comparison chart" id="chartImgPositions" loading="lazy">
+              </div>
+            </div>
+
+            <div class="table-card">
+              <div class="panel-header">
+                <h3>Tactical Position Breakdown Data</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Position</th>
+                      <th>Player Count</th>
+                      <th>Total Goals</th>
+                      <th>Total Assists</th>
+                      <th>Avg Goals/90</th>
+                      <th>Avg Rating</th>
+                      <th>Avg Minutes</th>
+                      <th>Pass %</th>
+                    </tr>
+                  </thead>
+                  <tbody id="positionsTableBody">
+                    <!-- Dynamic -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: AGE & PERFORMANCE -->
+          <div class="tab-pane" id="tab-age">
+            <div class="panel-card mb-6">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="scatter-chart" class="text-lime"></i>
+                  <h3>Age vs Performance Scatter Curve</h3>
+                </div>
+                <div class="actions-group">
+                  <select id="ageMetricSelect" class="form-select-sm">
+                    <option value="rating" selected>Y-Axis: Rating</option>
+                    <option value="goals_per_90">Y-Axis: Goals / 90</option>
+                    <option value="assists_per_90">Y-Axis: Assists / 90</option>
+                    <option value="minutes_played">Y-Axis: Minutes Played</option>
+                  </select>
+                  <a href="/api/charts/age" target="_blank" class="btn btn-secondary btn-sm">
+                    <i data-lucide="download"></i> Download PNG
+                  </a>
+                </div>
+              </div>
+              <div class="chart-frame">
+                <img src="/api/charts/age" alt="Age vs performance scatter" id="chartImgAge" loading="lazy">
+              </div>
+              <p class="chart-caption">Color-coded by position with linear trendline showing peak output windows.</p>
+            </div>
+          </div>
+
+          <!-- TAB 3: CLUBS -->
+          <div class="tab-pane" id="tab-clubs">
+            <div class="table-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="shield" class="text-cyan"></i>
+                  <h3>Club Squad Output & Efficiency Table</h3>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Club</th>
+                      <th>League</th>
+                      <th>Tracked Players</th>
+                      <th>Total Goals</th>
+                      <th>Total Assists</th>
+                      <th>Total Shots</th>
+                      <th>Total xG</th>
+                      <th>Avg Squad Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody id="clubsTableBody">
+                    <!-- Dynamic -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: CORRELATION MATRIX -->
+          <div class="tab-pane" id="tab-correlation">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <i data-lucide="grid" class="text-emerald"></i>
+                  <h3>Tactical Metric Correlation Heatmap</h3>
+                </div>
+                <a href="/api/charts/correlation" target="_blank" class="btn btn-secondary btn-sm">
+                  <i data-lucide="download"></i> Download PNG
+                </a>
+              </div>
+              <div class="chart-frame">
+                <img src="/api/charts/correlation" alt="Seaborn Correlation Heatmap" id="chartImgCorrelation" loading="lazy">
+              </div>
+              <p class="chart-caption font-semibold mt-2">
+                Important principle: Correlation describes statistical association; it does not establish causation.
+              </p>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================================================================
+             SECTION 5: MATCH INSIGHTS
+             ================================================================ -->
+        <section class="page-section" id="section-matches">
+          <div class="section-heading-bar">
+            <div>
+              <h2 class="section-title">Match Insights Lab</h2>
+              <p class="section-desc">Fixture results, home vs away scoring averages, and competitive outcomes from matches.csv.</p>
+            </div>
+            <a href="/api/export/matches.csv" class="btn btn-secondary btn-sm">
+              <i data-lucide="download"></i>
+              <span>Export Matches CSV</span>
+            </a>
+          </div>
+
+          <!-- Match Overview Metrics -->
+          <div class="kpi-grid mb-6">
+            <div class="kpi-card">
+              <div class="kpi-icon-box emerald">
+                <i data-lucide="calendar"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Matches</span>
+                <span class="kpi-value" id="kpiMatchesTotal">—</span>
+                <span class="kpi-subtext">Season fixtures</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box cyan">
+                <i data-lucide="goal"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Avg Goals / Match</span>
+                <span class="kpi-value" id="kpiMatchesAvgGoals">—</span>
+                <span class="kpi-subtext">Per 90 minutes</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box lime">
+                <i data-lucide="home"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Home Wins</span>
+                <span class="kpi-value" id="kpiMatchesHomeWins">—</span>
+                <span class="kpi-subtext">Hosting team triumphs</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box rose">
+                <i data-lucide="plane"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Away Wins</span>
+                <span class="kpi-value" id="kpiMatchesAwayWins">—</span>
+                <span class="kpi-subtext">Visiting team triumphs</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fixtures Table -->
+          <div class="table-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <i data-lucide="list" class="text-emerald"></i>
+                <h3>League Fixtures & Results</h3>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>League</th>
+                    <th>Home Team</th>
+                    <th>Score</th>
+                    <th>Away Team</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody id="matchesTableBody">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <footer class="app-footer">
+          Touchline Analytics | Built with Python, Flask, Pandas, NumPy, Matplotlib, and Seaborn
+        </footer>
+
+      </main>
+    </div>
+
+  </div>
+
+  <!-- ====================================================================
+       PLAYER DETAIL MODAL
+       ==================================================================== -->
+  <div class="modal-backdrop" id="playerModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-player-intro">
+          <div class="player-avatar-large" id="modalAvatar">PL</div>
+          <div>
+            <h3 class="modal-player-name" id="modalPlayerName">—</h3>
+            <div class="modal-player-meta">
+              <span id="modalClub">—</span> • <span id="modalLeague">—</span> • <span id="modalPosBadge" class="pos-badge">—</span>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Core Stat Highlights -->
+      <div class="modal-stats-row">
+        <div class="modal-stat">
+          <span class="stat-label">Appearances</span>
+          <span class="stat-val" id="modalApps">—</span>
+        </div>
+        <div class="modal-stat">
+          <span class="stat-label">Minutes</span>
+          <span class="stat-val" id="modalMins">—</span>
+        </div>
+        <div class="modal-stat">
+          <span class="stat-label">Rating</span>
+          <span class="stat-val text-amber font-bold" id="modalRating">—★</span>
+        </div>
+        <div class="modal-stat">
+          <span class="stat-label">Goals / 90</span>
+          <span class="stat-val text-emerald font-bold" id="modalG90">—</span>
+        </div>
+      </div>
+
+      <!-- Metric Grid -->
+      <div class="modal-metrics-grid">
+        <div class="metric-cell">
+          <span class="cell-label">Goals / xG</span>
+          <span class="cell-val" id="modalGoalsXg">— / —</span>
+        </div>
+        <div class="metric-cell">
+          <span class="cell-label">Assists / xA</span>
+          <span class="cell-val" id="modalAssistsXa">— / —</span>
+        </div>
+        <div class="metric-cell">
+          <span class="cell-label">Pass Completion</span>
+          <span class="cell-val" id="modalPassPct">—%</span>
+        </div>
+        <div class="metric-cell">
+          <span class="cell-label">Shot Accuracy</span>
+          <span class="cell-val" id="modalShotAcc">—%</span>
+        </div>
+        <div class="metric-cell">
+          <span class="cell-label">Key Passes</span>
+          <span class="cell-val" id="modalKeyPasses">—</span>
+        </div>
+        <div class="metric-cell">
+          <span class="cell-label">Def Actions / 90</span>
+          <span class="cell-val" id="modalDefActions">—</span>
+        </div>
+      </div>
+
+      <div class="modal-actions mt-6">
+        <button class="btn btn-primary" id="modalCompareAddBtn">
+          <i data-lucide="git-compare"></i> Compare Player
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div class="toast-popup" id="toastPopup">
+    <div class="toast-icon-wrap" id="toastIconWrap">
+      <i data-lucide="check" id="toastIcon"></i>
+    </div>
+    <span class="toast-text" id="toastText">Action completed</span>
+  </div>
+
+  <!-- Application JavaScript Client -->
+  <script src="{{ url_for('static', filename='js/script.js') }}?v=2.1"></script>
+</body>
+</html>

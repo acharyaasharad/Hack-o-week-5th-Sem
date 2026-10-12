@@ -1,0 +1,17 @@
+{
+  "name": "expense-tracker-rest-api",
+  "version": "1.0.0",
+  "description": "Expense Tracker with REST API",
+  "main": "restapi.js",
+  "scripts": {
+    "start": "node restapi.js",
+    "dev": "node --watch restapi.js"
+  },
+  "keywords": ["expense-tracker", "rest-api", "express"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
