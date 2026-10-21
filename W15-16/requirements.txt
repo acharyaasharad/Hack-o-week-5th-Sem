@@ -1,0 +1,3 @@
+# Minimal dependencies for Activation Function Visualizer
+numpy>=1.24.0
+matplotlib>=3.7.0

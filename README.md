@@ -17,6 +17,7 @@ Every week features an interactive, runnable web application built with professi
 | **W9-10** | **Customer Segmentation & Intelligence Dashboard** | Python 3, Flask, scikit-learn, K-Means, DBSCAN, Plotly.js | `5004` | [View Previews](W9-10/screenshots/README.md) |
 | **W11-12** | **Dimensionality Reduction Visualizer (PCA & t-SNE Studio)** | Python 3, Flask, scikit-learn, Plotly 2D/3D | `5005` | [View Previews](W11-12/screenshots/README.md) |
 | **W13-14** | **Ensemble Learning & Generalization Lab** | Python 3, Flask, scikit-learn, XGBoost, LightGBM | `5006` | [View Previews](W13-14/screenshots/README.md) |
+| **W15-16** | **Activation Function Visualizer** | Python 3, NumPy, Matplotlib | Standalone / GUI | [View Previews](W15-16/README.md) |
 
 ---
 
@@ -42,6 +43,9 @@ Every week features an interactive, runnable web application built with professi
 
 ### W13-14: Ensemble Learning & Generalization Lab
 ![W13-14 Overview](W13-14/screenshots/overview.png)
+
+### W15-16: Activation Function Visualizer
+![W15-16 Overview](W15-16/screenshots/comparison_graph.png)
 
 ---
 
